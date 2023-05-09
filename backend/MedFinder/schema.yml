@@ -1,0 +1,254 @@
+openapi: 3.0.3
+info:
+  title: MedFinder API
+  version: 1.0.0
+  description: API for MedFinder
+paths:
+  /api/doctors/:
+    get:
+      operationId: api_doctors_list
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DoctorSerializerRead'
+          description: ''
+  /api/doctors/{id}/:
+    get:
+      operationId: api_doctors_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSerializerRead'
+          description: ''
+  /api/doctors/create/:
+    post:
+      operationId: api_doctors_create_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DoctorSerializerWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DoctorSerializerWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DoctorSerializerWrite'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DoctorSerializerWrite'
+          description: ''
+  /api/doctors/update/{id}/:
+    put:
+      operationId: api_doctors_update_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DoctorSerializerUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DoctorSerializerUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DoctorSerializerUpdate'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DoctorSerializerUpdate'
+          description: ''
+    patch:
+      operationId: api_doctors_update_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDoctorSerializerUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDoctorSerializerUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDoctorSerializerUpdate'
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DoctorSerializerUpdate'
+          description: ''
+components:
+  schemas:
+    Department:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+      required:
+      - name
+    DoctorSerializerRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department:
+          $ref: '#/components/schemas/Department'
+        user:
+          $ref: '#/components/schemas/UserSerializerRead'
+        specialty:
+          type: string
+          maxLength: 50
+        availability:
+          type: string
+          maxLength: 100
+      required:
+      - availability
+      - department
+      - id
+      - specialty
+      - user
+    DoctorSerializerUpdate:
+      type: object
+      properties:
+        department:
+          $ref: '#/components/schemas/Department'
+        specialty:
+          type: string
+          maxLength: 50
+        availability:
+          type: string
+          maxLength: 100
+      required:
+      - availability
+      - department
+      - specialty
+    DoctorSerializerWrite:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department:
+          $ref: '#/components/schemas/Department'
+        user:
+          $ref: '#/components/schemas/UserSerializerWrite'
+        specialty:
+          type: string
+          maxLength: 50
+        availability:
+          type: string
+          maxLength: 100
+      required:
+      - availability
+      - department
+      - id
+      - specialty
+      - user
+    PatchedDoctorSerializerUpdate:
+      type: object
+      properties:
+        department:
+          $ref: '#/components/schemas/Department'
+        specialty:
+          type: string
+          maxLength: 50
+        availability:
+          type: string
+          maxLength: 100
+    UserSerializerRead:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+      required:
+      - username
+    UserSerializerWrite:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        password:
+          type: string
+          maxLength: 128
+      required:
+      - password
+      - username
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
