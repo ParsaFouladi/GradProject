@@ -37,3 +37,20 @@ class DoctorSerializerRead(serializers.ModelSerializer):
     class Meta:
         model = Doctor
         fields = '__all__'
+
+class DoctorSerializerUpdate(serializers.ModelSerializer):
+    department = DepartmentSerializer()
+    #user=UserSerializerRead()
+    class Meta:
+        model = Doctor
+        #For now, we will allow all fields to be updated
+        fields = ['department','specialty','availability']
+    
+    def update(self, instance, validated_data):
+        department_data = validated_data.pop('department')
+        department = Department.objects.get_or_create(**department_data)[0]
+        instance.department = department
+        instance.specialty = validated_data.get('specialty',instance.specialty)
+        instance.availability = validated_data.get('availability',instance.availability)
+        instance.save()
+        return instance

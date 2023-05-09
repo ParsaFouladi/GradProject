@@ -1,6 +1,6 @@
 from rest_framework import generics
 from .models import Doctor
-from .serializers import DoctorSerializerRead,UserSerializerRead,DoctorSerializerWrite,UserSerializerWrite
+from .serializers import DoctorSerializerRead,UserSerializerRead,DoctorSerializerWrite,UserSerializerWrite,DoctorSerializerUpdate
 
 # Create your views here.
 class DoctorDetailApiView(generics.RetrieveAPIView):
@@ -24,3 +24,9 @@ class DoctorCreateApiView(generics.CreateAPIView):
 class DoctorListApiView(generics.ListAPIView):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializerRead
+
+class DoctorUpdateApiView(generics.UpdateAPIView):
+    queryset = Doctor.objects.all()
+    serializer_class = DoctorSerializerUpdate
+
+    
