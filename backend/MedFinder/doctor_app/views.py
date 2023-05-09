@@ -1,15 +1,15 @@
 from rest_framework import generics
 from .models import Doctor
-from .serializers import DoctorSerializer,UserSerializer
+from .serializers import DoctorSerializerRead,UserSerializerRead,DoctorSerializerWrite,UserSerializerWrite
 
 # Create your views here.
 class DoctorDetailApiView(generics.RetrieveAPIView):
     queryset = Doctor.objects.all()
-    serializer_class = DoctorSerializer
+    serializer_class = UserSerializerRead
 
 class DoctorCreateApiView(generics.CreateAPIView):
     queryset = Doctor.objects.all()
-    serializer_class = DoctorSerializer
+    serializer_class = DoctorSerializerWrite
 
     # def perform_create(self, serializer):
     #     # Create a new user
@@ -20,3 +20,7 @@ class DoctorCreateApiView(generics.CreateAPIView):
 
     #     # Set the created user as the user for the doctor
     #     serializer.save(user=user)
+
+class DoctorListApiView(generics.ListAPIView):
+    queryset = Doctor.objects.all()
+    serializer_class = DoctorSerializerRead

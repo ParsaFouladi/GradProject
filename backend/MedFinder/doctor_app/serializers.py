@@ -2,18 +2,23 @@ from rest_framework import serializers
 from .models import Doctor, Department, DoctorContactInfo
 from django.contrib.auth.models import User
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializerWrite(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username','password',)
+
+class UserSerializerRead(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username',)
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = ('name',)
 
-class DoctorSerializer(serializers.ModelSerializer):
+class DoctorSerializerWrite(serializers.ModelSerializer):
     department = DepartmentSerializer()
-    user = UserSerializer()
+    user = UserSerializerWrite()
     class Meta:
         model = Doctor
         fields = '__all__'
@@ -25,3 +30,10 @@ class DoctorSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**user_data)
         doctor = Doctor.objects.create(user=user,department=department,**validated_data)
         return doctor
+
+class DoctorSerializerRead(serializers.ModelSerializer):
+    department = DepartmentSerializer()
+    user = UserSerializerRead()
+    class Meta:
+        model = Doctor
+        fields = '__all__'
