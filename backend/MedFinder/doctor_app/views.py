@@ -5,7 +5,7 @@ from .serializers import DoctorSerializerRead,UserSerializerRead,DoctorSerialize
 # Create your views here.
 class DoctorDetailApiView(generics.RetrieveAPIView):
     queryset = Doctor.objects.all()
-    serializer_class = UserSerializerRead
+    serializer_class = DoctorSerializerRead
 
 class DoctorCreateApiView(generics.CreateAPIView):
     queryset = Doctor.objects.all()
@@ -28,5 +28,9 @@ class DoctorListApiView(generics.ListAPIView):
 class DoctorUpdateApiView(generics.UpdateAPIView):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializerUpdate
+
+class DoctorDeleteApiView(generics.DestroyAPIView):
+    queryset = Doctor.objects.all()
+    serializer_class = DoctorSerializerRead
 
     

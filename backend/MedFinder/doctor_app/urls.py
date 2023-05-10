@@ -6,4 +6,5 @@ urlpatterns = [
     path('create/', views.DoctorCreateApiView.as_view()),
     path('', views.DoctorListApiView.as_view()),
     path('update/<int:pk>/', views.DoctorUpdateApiView.as_view()),
+    path('delete/<int:pk>/', views.DoctorDeleteApiView.as_view()),
 ]
