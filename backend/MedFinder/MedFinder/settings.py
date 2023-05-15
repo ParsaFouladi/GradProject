@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'doctor_app',
+    'patient_app',
     'rest_framework',
     'drf_spectacular',
 ]
@@ -84,7 +85,7 @@ DATABASES = {
 
         'USER': 'postgres',
 
-        'PASSWORD': 'tintin24',
+        'PASSWORD': 'rowaalqaisi',
 
         'HOST': '127.0.0.1',
 
