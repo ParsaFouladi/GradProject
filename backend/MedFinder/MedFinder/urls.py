@@ -22,7 +22,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('doctors/',include("doctor_app.urls")),
-    path('patinets/',include("patient_app.urls")),
+    path('patients/',include("patient_app.urls")),
 
     # YOUR PATTERNS
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
