@@ -1,5 +1,8 @@
 from rest_framework import generics
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from .models import Doctor
+from .permission import IsOwner
 from .serializers import DoctorSerializerRead,UserSerializerRead,DoctorSerializerWrite,UserSerializerWrite,DoctorSerializerUpdate
 
 # Create your views here.
@@ -26,6 +29,7 @@ class DoctorListApiView(generics.ListAPIView):
     serializer_class = DoctorSerializerRead
 
 class DoctorUpdateApiView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated, IsOwner]
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializerUpdate
 
