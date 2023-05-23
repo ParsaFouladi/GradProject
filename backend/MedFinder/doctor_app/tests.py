@@ -4,6 +4,7 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from .models import Department, Doctor, DoctorContactInfo
 from .serializers import DoctorSerializerRead, DoctorSerializerWrite
+from rest_framework.exceptions import ErrorDetail
 
 
 class DoctorTests(APITestCase):
@@ -62,6 +63,49 @@ class DoctorTests(APITestCase):
         self.assertEqual(self.doctor.specialty, 'Updated Specialty')
         
         
+
+    def test_create_doctor_missing_fields(self):
+        url = '/doctors/create/'
+        data = {
+            'user': {
+                'username': 'newuser',
+                # Missing 'password' field
+            },
+            # Missing 'specialty' field
+            'availability': 'Mon-Wed',
+            'department': {
+                'name': 'Dermatology'
+            }
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {
+            'user': {
+                'password': [ErrorDetail(string='This field is required.', code='required')]
+            },
+            'specialty': [ErrorDetail(string='This field is required.', code='required')]
+        })
+        self.assertEqual(Doctor.objects.count(), 1)  # No new doctor should be created
+
+    def test_create_doctor_invalid_data_type(self):
+        url = '/doctors/create/'
+        data = {
+            'user': {
+                'username': 'newuser',
+                'password': 'newpassword'
+            },
+            'specialty': 'Dermatologist',
+            'availability': 123,  # Invalid data type (should be a string)
+            'department': {
+                'name': 'Dermatology'
+            }
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data, {
+            'availability': [ErrorDetail(string='Enter a valid value.', code='invalid')]
+        })
+        self.assertEqual(Doctor.objects.count(), 1)  # No new doctor should be created
         
         
 class ModelsTestCase(TestCase):
