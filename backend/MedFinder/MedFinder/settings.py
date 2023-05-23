@@ -25,38 +25,36 @@ from google.cloud import secretmanager
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print("************************************")
-print("************************************")
-print()
 
 env = environ.Env(DEBUG=(bool, True))
 print(env)
 env_file = os.path.join(BASE_DIR, ".env")
 
 
-# try:
-#     _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
-# except google.auth.exceptions.DefaultCredentialsError:
-#     pass
+try:
+    _, os.environ["GOOGLE_CLOUD_PROJECT"] = google.auth.default()
+ 
+except google.auth.exceptions.DefaultCredentialsError:
+    pass
 
 if os.path.isfile(env_file):
     # Use a local secret file, if provided
 
     env.read_env(env_file)
 
-# elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
-#     # Pull secrets from Secret Manager
-#     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
+elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+    # Pull secrets from Secret Manager
+    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
 
-#     client = secretmanager.SecretManagerServiceClient()
-#     settings_name = os.environ.get("SETTINGS_NAME", "django_settings")
-#     name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
-#     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.environ.get("SETTINGS_NAME", "django_settings")
+    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
+    payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
 
-#     env.read_env(io.StringIO(payload))
+    env.read_env(io.StringIO(payload))
 
-# else:
-#     raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+else:
+    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -121,22 +119,6 @@ WSGI_APPLICATION = 'MedFinder.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-#         'NAME': 'dbMedFinder',
-
-#         'USER': 'postgres',
-
-#         'PASSWORD': 'AtoZis26?',
-
-#         'HOST': '127.0.0.1',
-
-#         'PORT': '5432',
-
-#     }
-# }
 
 
 DATABASES = {"default": env.db()}
