@@ -27,7 +27,6 @@ from google.cloud import secretmanager
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(DEBUG=(bool, True))
-print(env)
 env_file = os.path.join(BASE_DIR, ".env")
 
 
@@ -124,8 +123,8 @@ WSGI_APPLICATION = 'MedFinder.wsgi.application'
 DATABASES = {"default": env.db()}
 
 # If the flag as been set, configure to use proxy
-# if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
-if True:
+if os.getenv("USE_CLOUD_SQL_AUTH_PROXY", None):
+# if True:
     DATABASES["default"]["HOST"] = "127.0.0.1"
     DATABASES["default"]["PORT"] = 5433
 
