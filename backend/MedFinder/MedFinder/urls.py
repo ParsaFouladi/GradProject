@@ -27,7 +27,8 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('doctors/',include("doctor_app.urls")),
-    path('patients/',include("patient_app.urls")),
+    path('patients/',include("patient_app.urls_patients")),
+    path('insurances/',include("patient_app.urls_insurances")),
 
     # YOUR PATTERNS
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
