@@ -1,5 +1,11 @@
 from rest_framework import serializers
 from .models import Patient, PatientContactInfo, Insurance
+from django.contrib.auth.models import User
+
+class UserSerializerWrite(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username','password',)
 
 class PatientContactInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,6 +20,7 @@ class InsuranceSerializer(serializers.ModelSerializer):
 class PatientSerializer(serializers.ModelSerializer):
     contact_info = PatientContactInfoSerializer()
     insurance = InsuranceSerializer()
+    user = UserSerializerWrite()
 
     class Meta:
         model = Patient
