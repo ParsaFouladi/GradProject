@@ -18,7 +18,7 @@ class InsuranceSerializer(serializers.ModelSerializer):
         fields = ('insurance_number', 'provider', 'valid_from', 'valid_to')
 
 class PatientSerializer(serializers.ModelSerializer):
-    contact_info = PatientContactInfoSerializer()
+    
     insurance = InsuranceSerializer()
     user = UserSerializerWrite()
 
@@ -27,13 +27,19 @@ class PatientSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        contact_info_data = validated_data.pop('contact_info')
+        
         insurance_data = validated_data.pop('insurance')
 
-        contact_info = PatientContactInfo.objects.create(**contact_info_data)
-        insurance = Insurance.objects.create(**insurance_data)
+        
 
-        patient = Patient.objects.create(contact_info=contact_info, insurance=insurance, **validated_data)
+        
+        user_data = validated_data.pop('user')
+        user = User.objects.create_user(**user_data)
+
+        patient = Patient.objects.create(user=user, **validated_data)
+
+        
+        insurance = Insurance.objects.create(patient=patient,**insurance_data)
         return patient
 
     def update(self, instance, validated_data):
