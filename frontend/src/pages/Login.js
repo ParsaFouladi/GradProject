@@ -31,11 +31,12 @@ export default function Login() {
         e.preventDefault();
         
         try {
-            const response = axios.post(LOGIN_URL,
-                JSON.stringify({username: user, password: pwd}),
+            const response = axios.post(LOGIN_URL, {"username": user, "password": pwd},
+                //JSON.stringify({username: user, password: pwd}),
                 {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
+                    //body: {"username": user, "password": pwd},
+                    headers: { 'Content-Type': 'application/json' }
+                    
                 });
 
                 console.log(JSON.stringify(response.data));
@@ -58,41 +59,6 @@ export default function Login() {
             }
             errRef.current.focus();
         }
-
-        // useEffect(() => {
-        //     // Replace <username> and <password> with the actual credentials
-        //     // const username = "<username>";
-        //     // const password = "<password>";
-        
-        //     // Make a request to authenticate the user and obtain the tokens
-        //     axios.post("<your_token_endpoint>", {
-        //       username: user,
-        //       password: pwd
-        //     })
-        //       .then(response => {
-        //         // User authentication successful
-        //         const accessToken = response.data.access;
-        //         const refreshToken = response.data.refresh;
-        
-        //         // Set the access token in the default Authorization header for all requests
-        //         axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-        
-        //         // Make subsequent authenticated requests
-        //         axios.get("/doctors/")
-        //           .then(response => {
-        //             // Handle the response from the authenticated endpoint
-        //             console.log(response.data);
-        //           })
-        //           .catch(error => {
-        //             // Handle any errors from the authenticated request
-        //             console.error(error);
-        //           });
-        //       })
-        //       .catch(error => {
-        //         // User authentication failed
-        //         console.error(error);
-        //       });
-        //   }, []);
 
     }
 
