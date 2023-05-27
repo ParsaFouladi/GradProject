@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Patient, PatientContactInfo, Insurance
+from .models import Patient, Insurance
 from django.contrib.auth.models import User
 
 class UserSerializerWrite(serializers.ModelSerializer):
@@ -7,15 +7,15 @@ class UserSerializerWrite(serializers.ModelSerializer):
         model = User
         fields = ('username','password',)
 
-class PatientContactInfoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PatientContactInfo
-        fields = ('phone_number', 'address')
+# class PatientContactInfoSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = PatientContactInfo
+#         fields = ('phone_number', 'address')
 
 class InsuranceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Insurance
-        fields = ('insurance_number', 'provider', 'valid_from', 'valid_to')
+        fields = ('id','name', 'number', 'provider', 'valid_from', 'valid_to' )
 
 class PatientSerializer(serializers.ModelSerializer):
     
@@ -64,3 +64,4 @@ class PatientSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
+

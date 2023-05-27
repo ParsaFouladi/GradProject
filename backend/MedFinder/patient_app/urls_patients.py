@@ -7,4 +7,8 @@ urlpatterns = [
     path('', views.PatientListApiView.as_view()),
     path('update/<int:pk>/', views.PatientUpdateApiView.as_view()),
     path('delete/<int:pk>/', views.PatientDeleteApiView.as_view()),
+
+
 ]
+
+
