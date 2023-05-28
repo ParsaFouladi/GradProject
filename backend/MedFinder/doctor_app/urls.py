@@ -7,4 +7,10 @@ urlpatterns = [
     path('', views.DoctorListApiView.as_view()),
     path('update/<int:pk>/', views.DoctorUpdateApiView.as_view()),
     path('delete/<int:pk>/', views.DoctorDeleteApiView.as_view()),
+
+    #Scraped Doctors
+    path('scraped/', views.ScrapedDoctorsListApiView.as_view()),
+    path('scraped/<int:pk>/', views.ScrapedDoctorsDetailApiView.as_view()),
+    #Delete
+    path('scraped/delete/<int:pk>/', views.ScrapedDoctorsDeleteApiView.as_view()),
 ]

@@ -1,9 +1,9 @@
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .models import Doctor
+from .models import Doctor,ScrapedDoctors
 from .permissions import IsOwner
-from .serializers import DoctorSerializerRead,UserSerializerRead,DoctorSerializerWrite,UserSerializerWrite,DoctorSerializerUpdate
+from .serializers import ScrapedDoctorsSerializer,DoctorSerializerRead,UserSerializerRead,DoctorSerializerWrite,UserSerializerWrite,DoctorSerializerUpdate
 
 # Create your views here.
 class DoctorDetailApiView(generics.RetrieveAPIView):
@@ -36,5 +36,18 @@ class DoctorUpdateApiView(generics.UpdateAPIView):
 class DoctorDeleteApiView(generics.DestroyAPIView):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializerRead
+
+class ScrapedDoctorsListApiView(generics.ListAPIView):
+    queryset = ScrapedDoctors.objects.all()
+    serializer_class = ScrapedDoctorsSerializer
+
+class ScrapedDoctorsDetailApiView(generics.RetrieveAPIView):
+    queryset = ScrapedDoctors.objects.all()
+    serializer_class = ScrapedDoctorsSerializer
+
+#Delete
+class ScrapedDoctorsDeleteApiView(generics.DestroyAPIView):
+    queryset = ScrapedDoctors.objects.all()
+    serializer_class = ScrapedDoctorsSerializer
 
     

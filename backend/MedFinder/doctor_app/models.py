@@ -27,13 +27,13 @@ class DoctorContactInfo(models.Model):
         return '%s: %s' % (self.doctor.user.username, self.phone_number)
 
 class ScrapedDoctors(models.Model):
-    name = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    specialty = models.CharField(max_length=50)
-    url=models.CharField(max_length=100)
-    experience=models.CharField(max_length=100)
+    name = models.CharField(max_length=1000)
+    location = models.CharField(max_length=1000)
+    specialty = models.CharField(max_length=500)
+    url=models.CharField(max_length=10000)
+    experience=models.CharField(max_length=10000)
     description=models.TextField(blank=True)
-    image_url=models.CharField(max_length=100)
+    image_url=models.CharField(max_length=10000)
 
     def __str__(self):
         return '%s: %s' % (self.name, self.specialty)

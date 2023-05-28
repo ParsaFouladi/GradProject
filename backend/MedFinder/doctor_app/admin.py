@@ -6,4 +6,5 @@ from .models import *
 admin.site.register(Department)
 admin.site.register(Doctor)
 admin.site.register(DoctorContactInfo)
+admin.site.register(ScrapedDoctors)
 

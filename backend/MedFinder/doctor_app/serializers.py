@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Doctor, Department, DoctorContactInfo
+from .models import Doctor, Department, DoctorContactInfo,ScrapedDoctors
 from django.contrib.auth.models import User
 
 class UserSerializerWrite(serializers.ModelSerializer):
@@ -54,3 +54,8 @@ class DoctorSerializerUpdate(serializers.ModelSerializer):
         instance.availability = validated_data.get('availability',instance.availability)
         instance.save()
         return instance
+
+class ScrapedDoctorsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScrapedDoctors
+        fields = '__all__'
