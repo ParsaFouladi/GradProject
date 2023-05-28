@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import Navbar from "../components/Navbar"
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import axios from '../api/axios';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
 
@@ -21,6 +23,8 @@ function Signup() {
         photo: null,
     });
 
+    const navigate = useNavigate();
+
     const nextPage = () => {
         setCurrentPage(currentPage + 1);
     };
@@ -30,7 +34,6 @@ function Signup() {
     };
     
     function handleChange(event) {
-        console.log(event)
         const {name, value, type, checked} = event.target
         setFormData(prevFormData => {
             return {
@@ -49,12 +52,49 @@ function Signup() {
         setFormData({ ...formData, photo: file });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Perform form submission or data processing here
+        try {
+            if (formData.userType === 'doctor') {
+              const {userType, firstName, lastName, phoneNumber, address, birthDate, gender, email, password, hospitalName, medicalSpecialty, photo } = formData;
+        
+              const doctorRequestBody = {
+                department: { name: hospitalName },
+                user: { username: email, password },
+                specialty: medicalSpecialty,
+                availability: 'isAvailable',
+              };
+
+              
+        
+              await axios.post('/doctors/create/', doctorRequestBody);
+              console.log('Registered as a doctor!');
+              navigate('/doctorpanel')
+            } else if (formData.userType === 'patient') {
+
+                const {userType, firstName, lastName, phoneNumber, address, birthDate, gender, email, password, hospitalName, medicalSpecialty, photo } = formData;
+
+                const patientRequestBody = {
+                    insurance: [{ id: 1 }],
+                    user: { username: email, password },
+                    first_name: firstName,
+                    last_name: lastName,
+                    phone_number: phoneNumber,
+                    address: address,
+                  }
+              // Handle patient registration
+              await axios.post('/patients/create/', patientRequestBody);
+              console.log('Registered as a patient!');
+              navigate('/')
+            }
+          } catch (error) {
+                console.error(error);
+            }
+
         console.log(formData);
         // Reset form state
-        setCurrentPage(1);
+        // setCurrentPage(1);
         setFormData({
           userType: '',
           firstName: '',
@@ -79,8 +119,8 @@ function Signup() {
                 <div className="body-1">
                     <p>Register As</p>
                     <h3>Choose Your Role</h3>
-                    <button type='button' onClick={() => handleChange({ target: { name: 'userType', value: 'patient' } })}>A Doctor</button>
-                    <button type='button' onClick={() => handleChange({ target: { name: 'userType', value: 'doctor' } })}>A Patient</button>
+                    <button type='button' onClick={() => handleChange({ target: { name: 'userType', value: 'doctor' } })}>A Doctor</button>
+                    <button type='button' onClick={() => handleChange({ target: { name: 'userType', value: 'patient' } })}>A Patient</button>
                 </div>
             );
           case 2:
@@ -131,7 +171,7 @@ function Signup() {
                             type="text"
                             placeholder="Last Name"
                             onChange={handleChange}
-                            name="firstName"
+                            name="lastName"
                             value={formData.lastName}
                         />
                     </div>
@@ -228,11 +268,12 @@ function Signup() {
                                 onChange={handleChange}
                                 name="medicalSpecialty"
                             >
-                                <option value="red">Speciality 1</option>
-                                <option value="orange">Speciality 2</option>
-                                <option value="yellow">Speciality 3</option>
-                                <option value="green">Speciality 4</option>
-                                <option value="blue">Speciality 5</option>
+                                <option value="">-- Choose --</option>
+                                <option value="speciality1">Speciality 1</option>
+                                <option value="speciality2">Speciality 2</option>
+                                <option value="speciality3">Speciality 3</option>
+                                <option value="speciality4">Speciality 4</option>
+                                <option value="speciality5">Speciality 5</option>
                             </select>
                         </div>
                         <div className="input-field">
@@ -248,6 +289,12 @@ function Signup() {
 
                         </>
                     )}
+                    <button type="button" onClick={previousPage}>
+                        Previous
+                    </button>
+                    <button type="button" onClick={nextPage}>
+                        Next
+                    </button>
                 </div>
             );
           case 3:
@@ -262,6 +309,10 @@ function Signup() {
                     <input type="file" accept="image/*" onChange={handlePhotoUpload} />
                 </div>
                 <button>Add to profile</button>
+                <button type="button" onClick={previousPage}>
+                    Previous
+                </button>
+                <button type="submit" onClick={handleSubmit}>Submit</button>
               </div>
             );
           default:

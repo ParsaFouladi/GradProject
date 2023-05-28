@@ -1,18 +1,21 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-import { useRef, useState, useEffect, useContext } from 'react'
-import AuthContext from '../context/AuthProvider';
+import { useRef, useState, useEffect} from 'react'
+import useAuth from '../hooks/useAuth';
 import axios from '../api/axios';
-import { json } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 const LOGIN_URL = '/token/'
 
 export default function Login() {
 
-    const {setAuth} = useContext(AuthContext);
+    const {setAuth} = useAuth();
 
     const userRef = useRef();
     const errRef = useRef();
+
+    const navigate = useNavigate();
 
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
@@ -31,7 +34,7 @@ export default function Login() {
         e.preventDefault();
         
         try {
-            const response = axios.post(LOGIN_URL, {"username": user, "password": pwd},
+            const response = await axios.post(LOGIN_URL, {"username": user, "password": pwd},
                 //JSON.stringify({username: user, password: pwd}),
                 {
                     //body: {"username": user, "password": pwd},
@@ -41,11 +44,15 @@ export default function Login() {
 
                 console.log(JSON.stringify(response.data));
                 const accessToken = response.data.access;
+                if(user === "mohammad"){
+                    navigate('/');
+                }
             setAuth({username: user, password: pwd, accessToken});
             setUser('');
             setPwd('');
             setSuccess(true);
-
+            
+                
 
         } catch (err) {
             if (!err.response) {
@@ -86,7 +93,9 @@ export default function Login() {
                             id='username' 
                             ref={userRef} 
                             autoComplete='off'
-                            onChange={(e) => {setUser(e.target.value)}}
+                            onChange={(e) => { 
+                                setUser(e.target.value);
+                            }}
                             value={user}
                             required
                         />
