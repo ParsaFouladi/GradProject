@@ -86,7 +86,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "dbMedFinder",
         "USER": "postgres",
-        "PASSWORD": "AtoZis26?",
+        "PASSWORD": "tintin24",
         "HOST": "127.0.0.1",
         "PORT": "5432",
     }
@@ -139,6 +139,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    # Pagination
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 2,
 }
 
 SPECTACULAR_SETTINGS = {
