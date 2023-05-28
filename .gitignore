@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 scraping/urls.xlsx
 scraping/data.xlsx
+backend/MedFinder/doctor_app/data.xlsx
