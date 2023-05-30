@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Doctor, Department, DoctorContactInfo,ScrapedDoctors
+from .models import Doctor, Department, DoctorContactInfo,ScrapedDoctors,ReviewScraped
 from django.contrib.auth.models import User
 
 class UserSerializerWrite(serializers.ModelSerializer):
@@ -59,3 +59,8 @@ class ScrapedDoctorsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScrapedDoctors
         fields = '__all__'
+
+class ReviewScrapedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReviewScraped
+        fields = ['doctor','comment','rating']

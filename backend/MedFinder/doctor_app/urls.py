@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,re_path
 from . import views
 
 urlpatterns = [
@@ -13,4 +13,8 @@ urlpatterns = [
     path('scraped/<int:pk>/', views.ScrapedDoctorsDetailApiView.as_view()),
     #Delete
     path('scraped/delete/<int:pk>/', views.ScrapedDoctorsDeleteApiView.as_view()),
+
+    #Reviews
+    path('reviews/', views.ReviewScrapedListApiView.as_view()),
+    path('reviews/<int:pk>/', views.ReviewScrapedDetailApiView.as_view()),
 ]
