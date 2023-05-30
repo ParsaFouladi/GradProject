@@ -5,8 +5,42 @@ import { FaCaretDown } from "react-icons/fa";
 import { BiSearch } from "react-icons/bi";
 import { AiFillStar } from "react-icons/ai";
 import doctorImg from "../imgs/doctor.png"
+import { useState, useEffect } from 'react';
 
 function FilteredList() {
+
+    const [doctors, setDoctors] = useState([]);
+    const [nextPage, setNextPage] = useState('');
+    const [previousPage, setPreviousPage] = useState('');
+
+    useEffect(() => {
+        fetchDoctors('http://localhost:8000/doctors/scraped');
+    }, []);
+
+    const fetchDoctors = async (url) => {
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            setDoctors(data.results);
+            setNextPage(data.next);
+            setPreviousPage(data.previous);
+        } catch (error) {
+            console.error('Error fetching doctors:', error);
+        }
+    };
+
+    const handleNextPage = () => {
+        if (nextPage) {
+            fetchDoctors(nextPage);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (previousPage) {
+        fetchDoctors(previousPage);
+        }
+    };
+
   return (
     <div className='filtered-list-page'>
         <div className="oval-horizontal"></div>
@@ -78,7 +112,55 @@ function FilteredList() {
                 </div>
             </div>
         <div className="filtered-data">
-            <div className="doctor">
+            {/* <div className="doctor">
+                <div className="data">
+                    <div className="doctor-img">
+                        <img src={doctorImg} alt="doctorIMg" />
+                    </div>
+                    <div className="doctor-info">
+                        <h3>Dr. Mohammad Deeb, ENT PHY</h3>
+                        <h5>Ear-Nose-Throat physician</h5>
+                        <h6>Kolan British Hospital - located in Kyrenia</h6>
+                        <div className="rating">
+                            <AiFillStar className='star-filled-icon'/>
+                            <AiFillStar className='star-filled-icon'/>
+                            <AiFillStar className='star-filled-icon'/>
+                        </div>
+                    </div>
+                </div>
+                <div className="buttons">
+                    <button>Read Feedback</button>
+                    <button>Check Schedule</button>
+                </div>
+            </div> */}
+
+            {doctors.map((doctor) => (
+                    <div key={doctor.id} className="doctor">
+
+                        <div className="data">
+                            <div className="doctor-img">
+                                <img src={doctor.image_url} alt="doctorIMg" />
+                            </div>
+                            <div className="doctor-info">
+                                <h3>{doctor.name}</h3>
+                                <h5>{doctor.specialty}</h5>
+                                <h6>{doctor.location}</h6>
+                                <div className="rating">
+                                    <AiFillStar className='star-filled-icon'/>
+                                    <AiFillStar className='star-filled-icon'/>
+                                    <AiFillStar className='star-filled-icon'/>
+                                </div>                 
+                            </div>
+                        </div>
+                        <div className="buttons">
+                            <button>Read Feedback</button>
+                            <button>Check Schedule</button>
+                        </div>
+
+                    </div>
+                ))}
+
+            {/* <div className="doctor">
                 <div className="data">
                     <div className="doctor-img">
                         <img src={doctorImg} alt="doctorIMg" />
@@ -119,28 +201,11 @@ function FilteredList() {
                     <button>Read Feedback</button>
                     <button>Check Schedule</button>
                 </div>
-            </div>
-            <div className="doctor">
-                <div className="data">
-                    <div className="doctor-img">
-                        <img src={doctorImg} alt="doctorIMg" />
-                    </div>
-                    <div className="doctor-info">
-                        <h3>Dr. Mohammad Deeb, ENT PHY</h3>
-                        <h5>Ear-Nose-Throat physician</h5>
-                        <h6>Kolan British Hospital - located in Kyrenia</h6>
-                        <div className="rating">
-                            <AiFillStar className='star-filled-icon'/>
-                            <AiFillStar className='star-filled-icon'/>
-                            <AiFillStar className='star-filled-icon'/>
-                        </div>
-                    </div>
-                </div>
-                <div className="buttons">
-                    <button>Read Feedback</button>
-                    <button>Check Schedule</button>
-                </div>
-            </div>
+            </div> */}
+        </div>
+        <div className="navigation-buttons">
+            <button onClick={handlePreviousPage} disabled={!previousPage}>Previous</button>
+            <button onClick={handleNextPage} disabled={!nextPage}>Next</button>
         </div>
         </div>
     </div>

@@ -598,6 +598,21 @@ a{
 .filtered-list-page .doctor .buttons button:last-of-type:hover{
   background-color: var(--pink-color-dark);
 }
+.filtered-list-page .navigation-buttons{
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+.filtered-list-page .navigation-buttons *{
+  color: white;
+  background-color: var(--pink-color-dark);
+  padding: 10px 35px;
+  border-radius: 25px;
+  font-size: 22px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
 /* end filtered list page */
 
 /* start sign-up page */
