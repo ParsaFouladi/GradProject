@@ -1,5 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
+from patient_app.models import Patient
+import nltk
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+nltk.download('vader_lexicon')
 
 
 class Department(models.Model):
@@ -37,3 +41,42 @@ class ScrapedDoctors(models.Model):
 
     def __str__(self):
         return '%s: %s' % (self.name, self.specialty)
+
+class ReviewScraped(models.Model):
+    doctor = models.ForeignKey(ScrapedDoctors, on_delete=models.CASCADE)
+    #rating = models.IntegerField()
+    comment = models.TextField(blank=True)
+    #TODO: compute the rating based on the comments
+
+    @property
+    def rating(self):
+        sid = SentimentIntensityAnalyzer()
+        sentiment_scores = sid.polarity_scores(self.comment)
+        compound_score = sentiment_scores['compound']
+
+        # Map the compound score to a rating scale, e.g., 1 to 5
+        if compound_score >= 0.5:
+            rating = 5
+        elif compound_score >= 0.3:
+            rating = 4
+        elif compound_score >= 0.1:
+            rating = 3
+        elif compound_score >= -0.1:
+            rating = 2
+        else:
+            rating = 1
+
+        return rating
+
+
+    def __str__(self):
+        return '%s: %s' % (self.doctor.name, self.rating)
+    
+# class Review(models.Model):
+#     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+#     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+#     rating = models.IntegerField()
+#     comment = models.TextField(blank=True)
+
+#     def __str__(self):
+#         return '%s: %s' % (self.doctor.user.username, self.rating)
