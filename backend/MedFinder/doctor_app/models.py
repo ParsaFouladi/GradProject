@@ -44,9 +44,9 @@ class ScrapedDoctors(models.Model):
 
 class ReviewScraped(models.Model):
     doctor = models.ForeignKey(ScrapedDoctors, on_delete=models.CASCADE)
-    #rating = models.IntegerField()
+
     comment = models.TextField(blank=True)
-    #TODO: compute the rating based on the comments
+    
 
     @property
     def rating(self):
