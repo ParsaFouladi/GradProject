@@ -60,6 +60,13 @@ class ScrapedDoctorsSerializer(serializers.ModelSerializer):
         model = ScrapedDoctors
         fields = '__all__'
 
+#Serializer for getting all unique locations
+class ScrapedDoctorsLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ScrapedDoctors
+        fields = ['location']
+
+
 class ReviewScrapedSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewScraped
