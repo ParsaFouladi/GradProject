@@ -69,7 +69,7 @@ class ScrapedDoctorsLocationSerializer(serializers.ModelSerializer):
 class ScrapedDoctorsSpecialitySerializer(serializers.ModelSerializer):
     class Meta:
         model = ScrapedDoctors
-        fields = ['specialty']
+        fields = ['speciality']
 
 
 class ReviewScrapedSerializer(serializers.ModelSerializer):

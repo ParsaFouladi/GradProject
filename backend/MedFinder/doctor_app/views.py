@@ -67,7 +67,7 @@ class ScrapedDoctorsLocationListApiView(generics.ListAPIView):
     serializer_class = ScrapedDoctorsLocationSerializer
 
 class ScrapedDoctorsSpecialityListApiView(generics.ListAPIView):
-    queryset = ScrapedDoctors.objects.order_by('specialty').values('specialty').distinct()
+    queryset = ScrapedDoctors.objects.order_by('speciality').values('speciality').distinct()
     serializer_class = ScrapedDoctorsSpecialitySerializer
 
 class ReviewScrapedDetailApiView(generics.RetrieveAPIView):

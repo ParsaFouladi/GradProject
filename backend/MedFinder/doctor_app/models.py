@@ -15,7 +15,7 @@ class Department(models.Model):
 
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    specialty = models.CharField(max_length=50)
+    speciality = models.CharField(max_length=50)
     availability = models.CharField(max_length=100)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
@@ -33,7 +33,7 @@ class DoctorContactInfo(models.Model):
 class ScrapedDoctors(models.Model):
     name = models.CharField(max_length=1000)
     location = models.CharField(max_length=1000)
-    specialty = models.CharField(max_length=500)
+    speciality = models.CharField(max_length=500)
     url=models.CharField(max_length=10000)
     experience=models.CharField(max_length=10000)
     description=models.TextField(blank=True)
@@ -80,3 +80,29 @@ class ReviewScraped(models.Model):
 
 #     def __str__(self):
 #         return '%s: %s' % (self.doctor.user.username, self.rating)
+
+class TimeSlot(models.Model):
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+    #status can only be one of the following: available, booked, cancelled
+    status = models.CharField(max_length=20)
+
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return '%s: %s' % (self.doctor.user.username, self.start_time)
+
+class TimeSlotScraped(models.Model):
+    doctor=models.ForeignKey(ScrapedDoctors, on_delete=models.CASCADE)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+
+    #status can only be one of the following: available, booked, cancelled
+    status = models.CharField(max_length=20)
+
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return '%s: %s' % (self.doctor.name, self.start_time)
