@@ -1,9 +1,9 @@
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .models import Doctor,ScrapedDoctors,ReviewScraped
+from .models import Doctor,ScrapedDoctors,ReviewScraped,TimeSlotScraped
 from .permissions import IsOwner
-from .serializers import ScrapedDoctorsSerializer,DoctorSerializerRead,DoctorSerializerWrite,DoctorSerializerUpdate,ReviewScrapedSerializer,ScrapedDoctorsLocationSerializer,ScrapedDoctorsSpecialitySerializer
+from .serializers import ScrapedDoctorsSerializer,DoctorSerializerRead,DoctorSerializerWrite,DoctorSerializerUpdate,ReviewScrapedSerializer,ScrapedDoctorsLocationSerializer,ScrapedDoctorsSpecialitySerializer,TimeSlotScrapedSerializer
 
 from rest_framework.response import Response
 
@@ -52,6 +52,7 @@ class ScrapedDoctorsDeleteApiView(generics.DestroyAPIView):
     queryset = ScrapedDoctors.objects.all()
     serializer_class = ScrapedDoctorsSerializer
 
+
 class ReviewScrapedListApiView(generics.ListAPIView):
     queryset = ReviewScraped.objects.all()
     serializer_class = ReviewScrapedSerializer
@@ -73,6 +74,18 @@ class ScrapedDoctorsSpecialityListApiView(generics.ListAPIView):
 class ReviewScrapedDetailApiView(generics.RetrieveAPIView):
     queryset = ReviewScraped.objects.all()
     serializer_class = ReviewScrapedSerializer
+
+#Generic view for getting all timeslots for a doctor
+class TimeSlotScrapedListApiView(generics.ListAPIView):
+    queryset = TimeSlotScraped.objects.all()
+    serializer_class = TimeSlotScrapedSerializer
+    lookup_field = 'doctor'
+    def get_queryset(self):
+        doctor_id=self.kwargs['doctor']
+        if doctor_id is not None:
+            return TimeSlotScraped.objects.filter(doctor=doctor_id)
+        return TimeSlotScraped.objects.all()
+
 
 
 

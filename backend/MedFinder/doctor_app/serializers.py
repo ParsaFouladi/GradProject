@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Doctor, Department, DoctorContactInfo,ScrapedDoctors,ReviewScraped
+from .models import Doctor, Department, DoctorContactInfo,ScrapedDoctors,ReviewScraped,TimeSlotScraped
 from django.contrib.auth.models import User
 
 class UserSerializerWrite(serializers.ModelSerializer):
@@ -76,3 +76,10 @@ class ReviewScrapedSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewScraped
         fields = ['doctor','comment','rating']
+
+#Serializer for getting all time slots for a doctor
+class TimeSlotScrapedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlotScraped
+        fields = '__all__'
+    

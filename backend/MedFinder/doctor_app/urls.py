@@ -22,4 +22,7 @@ urlpatterns = [
     #Reviews
     path('reviews/', views.ReviewScrapedListApiView.as_view()),
     path('reviews/<int:pk>/', views.ReviewScrapedDetailApiView.as_view()),
+
+    #Timeslots
+    path('timeslots/<int:doctor>/', views.TimeSlotScrapedListApiView.as_view()),
 ]
