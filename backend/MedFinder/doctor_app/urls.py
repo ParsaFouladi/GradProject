@@ -15,7 +15,9 @@ urlpatterns = [
     path('scraped/delete/<int:pk>/', views.ScrapedDoctorsDeleteApiView.as_view()),
 
     #Scraped Doctors Location
-    path('scraped/location/', views.ScrapedDoctorsLocationListApiView.as_view()),
+    path('locations/', views.ScrapedDoctorsLocationListApiView.as_view()),
+    #Scraped Doctors Specialty
+    path('specialities/', views.ScrapedDoctorsSpecialityListApiView.as_view()),
 
     #Reviews
     path('reviews/', views.ReviewScrapedListApiView.as_view()),

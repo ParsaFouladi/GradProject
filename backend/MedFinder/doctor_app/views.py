@@ -3,7 +3,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Doctor,ScrapedDoctors,ReviewScraped
 from .permissions import IsOwner
-from .serializers import ScrapedDoctorsSerializer,DoctorSerializerRead,UserSerializerRead,DoctorSerializerWrite,UserSerializerWrite,DoctorSerializerUpdate,ReviewScrapedSerializer,ScrapedDoctorsLocationSerializer
+from .serializers import ScrapedDoctorsSerializer,DoctorSerializerRead,DoctorSerializerWrite,DoctorSerializerUpdate,ReviewScrapedSerializer,ScrapedDoctorsLocationSerializer,ScrapedDoctorsSpecialitySerializer
+
 from rest_framework.response import Response
 
 # Create your views here.
@@ -65,6 +66,9 @@ class ScrapedDoctorsLocationListApiView(generics.ListAPIView):
     queryset = ScrapedDoctors.objects.order_by('location').values('location').distinct()
     serializer_class = ScrapedDoctorsLocationSerializer
 
+class ScrapedDoctorsSpecialityListApiView(generics.ListAPIView):
+    queryset = ScrapedDoctors.objects.order_by('specialty').values('specialty').distinct()
+    serializer_class = ScrapedDoctorsSpecialitySerializer
 
 class ReviewScrapedDetailApiView(generics.RetrieveAPIView):
     queryset = ReviewScraped.objects.all()
