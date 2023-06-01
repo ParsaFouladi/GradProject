@@ -82,4 +82,5 @@ class TimeSlotScrapedSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlotScraped
         fields = '__all__'
+
     
