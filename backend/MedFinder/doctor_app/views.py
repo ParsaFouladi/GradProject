@@ -43,6 +43,17 @@ class ScrapedDoctorsListApiView(generics.ListAPIView):
     queryset = ScrapedDoctors.objects.all()
     serializer_class = ScrapedDoctorsSerializer
 
+    def get_queryset(self):
+        location = self.request.query_params.get('location', None)
+        speciality = self.request.query_params.get('speciality', None)
+        if location is not None and speciality is not None:
+            return ScrapedDoctors.objects.filter(location=location,speciality=speciality)
+        elif location is not None:
+            return ScrapedDoctors.objects.filter(location=location)
+        elif speciality is not None:
+            return ScrapedDoctors.objects.filter(speciality=speciality)
+        return ScrapedDoctors.objects.all()
+
 class ScrapedDoctorsDetailApiView(generics.RetrieveAPIView):
     queryset = ScrapedDoctors.objects.all()
     serializer_class = ScrapedDoctorsSerializer
