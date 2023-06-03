@@ -1,13 +1,34 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { BsBell } from "react-icons/bs";
 import Navbar from '../components/Navbar';
 import { FaCaretDown } from "react-icons/fa";
 import { BiSearch } from "react-icons/bi";
 import { AiFillStar } from "react-icons/ai";
-import doctorImg from "../imgs/doctor.png"
+import { useParams } from 'react-router-dom';
 
 
-function DoctorDetails() {
+function DoctorDetails(props) {
+    const {id} = useParams()
+    const [doctor, setDoctor] = useState(null);
+
+  useEffect(() => {
+    const fetchDoctorDetails = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/doctors/scraped/${id}/`);
+        const data = await response.json();
+        setDoctor(data);
+      } catch (error) {
+        console.error('Error fetching doctor details:', error);
+      }
+    };
+
+    fetchDoctorDetails();
+  }, [id]);
+
+  if (!doctor) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className='doctor-details'>
         <div className="oval-horizontal"></div>
@@ -82,12 +103,12 @@ function DoctorDetails() {
                 <div className="doctor">
                     <div className="data">
                         <div className="doctor-img">
-                            <img src={doctorImg} alt="doctorIMg" />
+                            <img src={doctor.image_url} alt="doctorIMg" />
                         </div>
                         <div className="doctor-info">
-                            <h3>Dr. Mohammad Deeb, ENT PHY</h3>
-                            <h5>Ear-Nose-Throat physician</h5>
-                            <h6>Kolan British Hospital - located in Kyrenia</h6>
+                            <h3>{doctor.name}</h3>
+                            <h5>{doctor.speciality}</h5>
+                            <h6>{doctor.location}</h6>
                             <div className="rating">
                                 <AiFillStar className='star-filled-icon'/>
                                 <AiFillStar className='star-filled-icon'/>
