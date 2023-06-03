@@ -9,12 +9,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # Read the Excel file into a pandas DataFrame
         data = pd.read_excel("data.xlsx")
-
+        data=data.drop_duplicates(subset='url', keep="last")
         # Iterate over the rows of the DataFrame and create ScrapedDoctors instances
         for _, row in data.iterrows():
             name = row["name"]
             location = row["location"]
-            specialty = row["specialty"]
+            speciality = row["specialty"]
             experience = row["experience"]
             description = row["description"]
             url = row["url"]
@@ -24,7 +24,7 @@ class Command(BaseCommand):
             scraped_doctor = ScrapedDoctors(
                 name=name,
                 location=location,
-                specialty=specialty,
+                speciality=speciality,
                 experience=experience,
                 description=description,
                 url=url,
