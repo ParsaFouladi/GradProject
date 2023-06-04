@@ -18,6 +18,7 @@ function FilteredList() {
   const [locationOptions, setLocationOptions] = useState([]);
   const [specialtyOptions, setSpecialtyOptions] = useState([]);
   const [resetFilters, setResetFilters] = useState(false);
+  const [doctorRatings, setDoctorRatings] = useState({});
 
   useEffect(() => {
     fetchDoctors('http://localhost:8000/doctors/scraped');
@@ -39,6 +40,7 @@ function FilteredList() {
       setDoctors(data.results);
       setNextPage(data.next);
       setPreviousPage(data.previous);
+      await fetchDoctorRatings(data.results);
     } catch (error) {
       console.error('Error fetching doctors:', error);
     }
@@ -61,6 +63,7 @@ function FilteredList() {
       setDoctors(data.results);
       setNextPage(data.next);
       setPreviousPage(data.previous);
+      await fetchDoctorRatings(doctors);
     } catch (error) {
       console.error('Error fetching doctors:', error);
     }
@@ -96,6 +99,25 @@ function FilteredList() {
       console.error('Error fetching specialty options:', error);
     }
   };
+
+  const fetchDoctorRatings = async (doctors) => {
+    try {
+      const ratingsPromises = doctors.map(async (doctor) => {
+        const response = await fetch(`http://localhost:8000/doctors/reviews/${doctor.id}`);
+        const data = await response.json();
+        return { doctorId: doctor.id, rating: data.rating };
+      });
+      const ratings = await Promise.all(ratingsPromises);
+      const ratingsObj = {};
+      ratings.forEach((rating) => {
+        ratingsObj[rating.doctorId] = rating.rating;
+      });
+      setDoctorRatings(ratingsObj);
+    } catch (error) {
+      console.error('Error fetching doctor ratings:', error);
+    }
+  };
+
 
   const handleNextPage = () => {
     if (nextPage) {
@@ -202,27 +224,6 @@ function FilteredList() {
                 <button onClick={handleResetFilters} className='reset-filters-btn'>Reset Filters</button>
             </div>
         <div className="filtered-data">
-            {/* <div className="doctor">
-                <div className="data">
-                    <div className="doctor-img">
-                        <img src={doctorImg} alt="doctorIMg" />
-                    </div>
-                    <div className="doctor-info">
-                        <h3>Dr. Mohammad Deeb, ENT PHY</h3>
-                        <h5>Ear-Nose-Throat physician</h5>
-                        <h6>Kolan British Hospital - located in Kyrenia</h6>
-                        <div className="rating">
-                            <AiFillStar className='star-filled-icon'/>
-                            <AiFillStar className='star-filled-icon'/>
-                            <AiFillStar className='star-filled-icon'/>
-                        </div>
-                    </div>
-                </div>
-                <div className="buttons">
-                    <button>Read Feedback</button>
-                    <button>Check Schedule</button>
-                </div>
-            </div> */}
 
             {doctors.map((doctor) => (
                     <div key={doctor.id} className="doctor">
@@ -236,9 +237,9 @@ function FilteredList() {
                                 <h5>{doctor.speciality}</h5>
                                 <h6>{doctor.location}</h6>
                                 <div className="rating">
-                                    <AiFillStar className='star-filled-icon'/>
-                                    <AiFillStar className='star-filled-icon'/>
-                                    <AiFillStar className='star-filled-icon'/>
+                                    {[...Array(doctorRatings[doctor.id] || 0)].map((_, index) => (
+                                        <AiFillStar key={index} className='star-filled-icon' />
+                                    ))}
                                 </div>                 
                             </div>
                         </div>
@@ -252,49 +253,6 @@ function FilteredList() {
 
                     </div>
                 ))}
-
-            {/* <div className="doctor">
-                <div className="data">
-                    <div className="doctor-img">
-                        <img src={doctorImg} alt="doctorIMg" />
-                    </div>
-                    <div className="doctor-info">
-                        <h3>Dr. Mohammad Deeb, ENT PHY</h3>
-                        <h5>Ear-Nose-Throat physician</h5>
-                        <h6>Kolan British Hospital - located in Kyrenia</h6>
-                        <div className="rating">
-                            <AiFillStar className='star-filled-icon'/>
-                            <AiFillStar className='star-filled-icon'/>
-                            <AiFillStar className='star-filled-icon'/>
-                        </div>
-                    </div>
-                </div>
-                <div className="buttons">
-                    <button>Read Feedback</button>
-                    <button>Check Schedule</button>
-                </div>
-            </div>
-            <div className="doctor">
-                <div className="data">
-                    <div className="doctor-img">
-                        <img src={doctorImg} alt="doctorIMg" />
-                    </div>
-                    <div className="doctor-info">
-                        <h3>Dr. Mohammad Deeb, ENT PHY</h3>
-                        <h5>Ear-Nose-Throat physician</h5>
-                        <h6>Kolan British Hospital - located in Kyrenia</h6>
-                        <div className="rating">
-                            <AiFillStar className='star-filled-icon'/>
-                            <AiFillStar className='star-filled-icon'/>
-                            <AiFillStar className='star-filled-icon'/>
-                        </div>
-                    </div>
-                </div>
-                <div className="buttons">
-                    <button>Read Feedback</button>
-                    <button>Check Schedule</button>
-                </div>
-            </div> */}
         </div>
         <div className="navigation-buttons">
             <button onClick={handlePreviousPage} disabled={!previousPage}>Previous</button>

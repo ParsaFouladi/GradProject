@@ -10,6 +10,8 @@ import { useParams } from 'react-router-dom';
 function DoctorDetails(props) {
     const {id} = useParams()
     const [doctor, setDoctor] = useState(null);
+    const [rating, setRating] = useState(null);
+    const [comment, setComment] = useState(null);
 
   useEffect(() => {
     const fetchDoctorDetails = async () => {
@@ -22,8 +24,35 @@ function DoctorDetails(props) {
       }
     };
 
+    const fetchDoctorRating = async () => {
+        try {
+          const response = await fetch(`http://localhost:8000/doctors/reviews/${id}`);
+          const data = await response.json();
+          setRating(data.rating);
+          setComment(data.comment);
+        } catch (error) {
+          console.error('Error fetching doctor rating:', error);
+        }
+      };
+    
+
     fetchDoctorDetails();
+    fetchDoctorRating();
   }, [id]);
+
+  const renderRatingStars = () => {
+    const filledStars = rating ? Math.floor(rating) : 0;
+    const remainingStars = 5 - filledStars;
+    const stars = [];
+
+    for (let i = 0; i < filledStars; i++) {
+      stars.push(<AiFillStar key={i} className="star-filled-icon" />);
+    }
+
+
+
+    return stars;
+  };
 
   if (!doctor) {
     return <div>Loading...</div>;
@@ -110,9 +139,11 @@ function DoctorDetails(props) {
                             <h5>{doctor.speciality}</h5>
                             <h6>{doctor.location}</h6>
                             <div className="rating">
-                                <AiFillStar className='star-filled-icon'/>
-                                <AiFillStar className='star-filled-icon'/>
-                                <AiFillStar className='star-filled-icon'/>
+                            {rating && (
+                                <>
+                                {renderRatingStars()}
+                                </>
+                            )}
                             </div>
                         </div>
                     </div>
@@ -128,9 +159,7 @@ function DoctorDetails(props) {
                     <div className="patients-reviews">
                         <h3>Recent Reviews</h3>
                         <div className="review">
-                            <p>I had a very sore throat .. unbearable pain ( I couldn't eat)
-                            so I booked my appointment with Dr. Ward. She was so professional and
-                            friendly ... show more</p>
+                            <p>{comment}</p>
                             <h6>-Yagmur W. - February. 2023</h6>
                         </div>
                         <div className="review">
