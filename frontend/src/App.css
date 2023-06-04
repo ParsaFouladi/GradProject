@@ -541,6 +541,22 @@ a{
 .filtered-list-page .search-box .search-icon-container:hover::before{
   background-color: #f6f6f6;
 }
+.filtered-list-page .search-box .reset-filters-btn{
+  position: absolute;
+  bottom: -15px;
+  padding: 10px 25px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  color: var(--dark-blue-color);
+  font-size: 18px;
+  transition: 0.3s;
+  cursor: pointer;
+}
+.filtered-list-page .search-box .reset-filters-btn:hover{
+  background-color: var(--dark-blue-color);
+  color: white;
+}
 .filtered-list-page .filtered-data{
   position: relative;
   background-color: rgba(255, 255, 255, 0.6);

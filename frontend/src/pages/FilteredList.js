@@ -10,59 +10,30 @@ import { Link } from 'react-router-dom';
 
 function FilteredList() {
 
-    // const [doctors, setDoctors] = useState([]);
-    // const [previousPage, setPreviousPage] = useState('');
-    // const [nextPage, setNextPage] = useState('');
-    
-  
-    // useEffect(() => {
-    //   fetchData('http://localhost:8000/doctors/scraped/');
-    // }, []);
-  
-    // const fetchData = async (url) => {
-    //   try {
-    //     const response = await axios.get(url);
-    //     const { results, previous, next } = response.data;
-    //     setDoctors(results);
-    //     setPreviousPage(previous);
-    //     setNextPage(next);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // };
-  
-    // const handlePreviousPage = () => {
-    //   if (previousPage) {
-    //     fetchData(previousPage);
-    //   }
-    // };
-  
-    // const handleNextPage = () => {
-    //   if (nextPage) {
-    //     fetchData(nextPage);
-    //   }
-    // };
-
-    const [doctors, setDoctors] = useState([]);
+  const [doctors, setDoctors] = useState([]);
   const [nextPage, setNextPage] = useState('');
   const [previousPage, setPreviousPage] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
+  const [selectedSpecialty, setSelectedSpecialty] = useState('');
   const [locationOptions, setLocationOptions] = useState([]);
+  const [specialtyOptions, setSpecialtyOptions] = useState([]);
+  const [resetFilters, setResetFilters] = useState(false);
 
   useEffect(() => {
     fetchDoctors('http://localhost:8000/doctors/scraped');
     fetchLocationOptions('http://localhost:8000/doctors/locations/?limit=30');
+    fetchSpecialtyOptions('http://localhost:8000/doctors/specialities/?limit=533');
   }, []);
 
   useEffect(() => {
-    if (selectedLocation) {
-      fetchDoctorsWithLocation();
+    if (selectedLocation || selectedSpecialty || resetFilters) {
+      fetchDoctorsWithFilters();
     }
-  }, [selectedLocation]);
+  }, [selectedLocation, selectedSpecialty, resetFilters]);
 
   const fetchDoctors = async (url) => {
     try {
-      const apiUrl = selectedLocation ? `${url}?location=${selectedLocation}` : url;
+      const apiUrl = buildApiUrl(url);
       const response = await fetch(apiUrl);
       const data = await response.json();
       setDoctors(data.results);
@@ -73,9 +44,19 @@ function FilteredList() {
     }
   };
 
-  const fetchDoctorsWithLocation = async () => {
+  const fetchDoctorsWithFilters = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/doctors/scraped?location=${selectedLocation}`);
+      const baseUrl = 'http://localhost:8000/doctors/scraped';
+      let apiUrl = buildApiUrl(baseUrl);
+  
+      if (resetFilters) {
+        setSelectedLocation('');
+        setSelectedSpecialty('');
+        setResetFilters(false);
+        apiUrl = baseUrl;
+      }
+  
+      const response = await fetch(apiUrl);
       const data = await response.json();
       setDoctors(data.results);
       setNextPage(data.next);
@@ -85,6 +66,17 @@ function FilteredList() {
     }
   };
 
+  const buildApiUrl = (baseUrl) => {
+    let apiUrl = baseUrl;
+    if (selectedLocation) {
+      apiUrl += `?location=${selectedLocation}`;
+    }
+    if (selectedSpecialty) {
+      apiUrl += `${selectedLocation ? '&' : '?'}speciality=${selectedSpecialty}`;
+    }
+    return apiUrl;
+  };
+
   const fetchLocationOptions = async (url) => {
     try {
       const response = await fetch(url);
@@ -92,6 +84,16 @@ function FilteredList() {
       setLocationOptions(data.results);
     } catch (error) {
       console.error('Error fetching location options:', error);
+    }
+  };
+
+  const fetchSpecialtyOptions = async (url) => {
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      setSpecialtyOptions(data.results);
+    } catch (error) {
+      console.error('Error fetching specialty options:', error);
     }
   };
 
@@ -111,6 +113,15 @@ function FilteredList() {
     const location = event.target.value;
     setSelectedLocation(location);
   };
+  
+  const handleSpecialtyChange = (event) => {
+    const specialty = event.target.value;
+    setSelectedSpecialty(specialty);
+  };
+
+  const handleResetFilters = () => {
+    setResetFilters(true);
+  };
 
   return (
     <div className='filtered-list-page'>
@@ -129,14 +140,17 @@ function FilteredList() {
         <div className="search-box">
             <div className="select-box">
                 <select 
-                //name="specialty" id="specialty" value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)}
+                    name="specialty"
+                    id="specialty"
+                    value={selectedSpecialty}
+                    onChange={handleSpecialtyChange}
                  >
-                <option value="">Select a specialty</option>
-                {/* {specialties.map((specialty, index) => (
-                    <option key={index} value={specialty.speciality}>
-                        {specialty.speciality}
-                    </option>
-                ))} */}
+                    <option value="">Select a specialty</option>
+                    {specialtyOptions.map((option, index) => (
+                        <option key={index} value={option.speciality}>
+                        {option.speciality}
+                        </option>
+                    ))}
                 </select>
                 <FaCaretDown className="chevron-down"/>
             </div>
@@ -185,6 +199,7 @@ function FilteredList() {
                 <div className="search-icon-container">
                 <BiSearch className='search-icon'/>
                 </div>
+                <button onClick={handleResetFilters} className='reset-filters-btn'>Reset Filters</button>
             </div>
         <div className="filtered-data">
             {/* <div className="doctor">
