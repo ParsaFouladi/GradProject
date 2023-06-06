@@ -961,4 +961,42 @@ a{
   width: 60%;
   margin-bottom: 0;
 }
+.doctor-details .table-container{
+  padding: 20px;
+}
+.doctor-details .table-container .timetable{
+  border-collapse: collapse;
+  margin: 25px 0px;
+  font-size: 16px;
+  min-width: 500px;
+  border-radius: 7px 7px 0px 0px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+.doctor-details .table-container .timetable thead tr{
+  background-color: var(--blue-color);
+  color: white;
+  font-weight: bold;
+  text-align: left;
+}
+.doctor-details .table-container .timetable th,
+.doctor-details .table-container .timetable td{
+  padding: 14px 18px;
+}
+.doctor-details .table-container .timetable tbody tr{
+  border-bottom: 1px solid #ddd;
+}
+.doctor-details .table-container .timetable tbody tr:nth-of-type(even){
+  background-color: #f6f6f6;
+}
+.doctor-details .table-container .timetable tbody tr:last-of-type{
+  border-bottom: 2px solid var(--blue-color);
+}
+.doctor-details .table-container .timetable tbody td div.booked,
+.doctor-details .table-container .timetable tbody td div.cancelled{
+  color: #ed2939;
+}
+.doctor-details .table-container .timetable tbody td div.available{
+  color: #0492c2;
+}
 /* end doctor details page */
