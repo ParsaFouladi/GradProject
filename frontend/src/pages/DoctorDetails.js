@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import { FaCaretDown } from "react-icons/fa";
 import { BiSearch } from "react-icons/bi";
 import { AiFillStar } from "react-icons/ai";
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 
 
 function DoctorDetails(props) {
@@ -16,7 +16,8 @@ function DoctorDetails(props) {
     const [timeSlots, setTimeSlots] = useState([]);
     const [currentWeek, setCurrentWeek] = useState(new Date());
 
-    const timeTableRef = useRef(null)
+    const timeTableRef = useRef(null);
+    const location = useLocation();
 
   useEffect(() => {
     const fetchDoctorDetails = async () => {
@@ -55,6 +56,15 @@ function DoctorDetails(props) {
     fetchDoctorDetails();
     fetchDoctorRating();
   }, [id, currentWeek]);
+
+  // to check if I have a scrollToSection so that I can automatically scoll to timetable when clicking on check schedule
+  useEffect(() => {
+    if (location.state && location.state.scrollToSection) {
+      setTimeout(() => {
+        timeTableRef.current.scrollIntoView({ behavior: 'smooth' });
+      }, 0);
+    }
+  }, [location]);
 
   const renderRatingStars = () => {
     const filledStars = rating ? Math.floor(rating) : 0;
@@ -95,7 +105,7 @@ function DoctorDetails(props) {
     nextWeek.setDate(nextWeek.getDate() + 7);
     setCurrentWeek(nextWeek);
   };
-
+  
 
   const renderTimeSlotInfo = (day, index) => {
     if (groupedTimeslots[day]) {
@@ -266,4 +276,4 @@ function DoctorDetails(props) {
   )
 }
 
-export default DoctorDetails
+export default DoctorDetails;
