@@ -4,6 +4,7 @@ import { useRef, useState, useEffect} from 'react'
 import useAuth from '../hooks/useAuth';
 import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 const LOGIN_URL = '/token/'
@@ -35,22 +36,25 @@ export default function Login() {
         
         try {
             const response = await axios.post(LOGIN_URL, {"username": user, "password": pwd},
-                //JSON.stringify({username: user, password: pwd}),
                 {
-                    //body: {"username": user, "password": pwd},
                     headers: { 'Content-Type': 'application/json' }
                     
                 });
 
                 console.log(JSON.stringify(response.data));
                 const accessToken = response.data.access;
-                if(user === "mohammad"){
-                    navigate('/');
+                // Check if the API response contains a valid access token
+                if (accessToken) {
+                    setAuth({ username: user, password: pwd, accessToken });
+                    setUser('');
+                    setPwd('');
+                    setSuccess(true);
+                    navigate('/', { isLoggedIn: true});
+                    setLoginStatus(true);
+                } else {
+                    setErrMsg('Invalid credentials');
+                    errRef.current.focus();
                 }
-            setAuth({username: user, password: pwd, accessToken});
-            setUser('');
-            setPwd('');
-            setSuccess(true);
             
                 
 
@@ -69,6 +73,9 @@ export default function Login() {
 
     }
 
+    function setLoginStatus(status) {
+        localStorage.setItem('isLoggedIn', status);
+      }
 
   return (
     <>

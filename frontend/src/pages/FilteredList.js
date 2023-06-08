@@ -60,10 +60,11 @@ function FilteredList() {
   
       const response = await fetch(apiUrl);
       const data = await response.json();
-      setDoctors(data.results);
+      const filteredDoctors = data.results;
+      setDoctors(filteredDoctors);
       setNextPage(data.next);
       setPreviousPage(data.previous);
-      await fetchDoctorRatings(doctors);
+      await fetchDoctorRatings(filteredDoctors);
     } catch (error) {
       console.error('Error fetching doctors:', error);
     }

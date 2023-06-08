@@ -580,6 +580,8 @@ a{
 }
 .filtered-list-page .doctor .data .doctor-img{
   margin-right: 20px;
+  border-radius: 20px;
+  overflow: hidden;
 }
 .filtered-list-page .doctor .data .doctor-info{
 }

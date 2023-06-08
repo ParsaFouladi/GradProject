@@ -1,18 +1,70 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import Navbar from '../components/Navbar'
 import { FaCaretDown } from "react-icons/fa";
 import { BiSearch } from "react-icons/bi";
 import DoctorSlider from '../components/DoctorSlider';
+import { Link, useLocation, useNavigate, } from 'react-router-dom';
 
 function Home() {
+
+    const [userId, setUserId] = useState(null);
+
+    const location = useLocation();
+    const isLoggedIn = getLoginStatus(); // Get the isLoggedIn value from the local storage
+
+    // Show the login button only if the user is not logged in and not coming from the login page
+    const showLoginButton = !isLoggedIn && !(location.state && location.state.fromLogin);
+
+    const navigate = useNavigate();
+
+    function getLoginStatus() {
+        return localStorage.getItem('isLoggedIn') === 'true';
+      }
+
+    //   useEffect(() => {
+    //     const fetchUser = async () => {
+    //       try {
+    //         // Fetch the logged-in user's data using your authentication mechanism
+    //         const userData = await fetchUserData(); // Replace with your own code to fetch user data
+      
+    //         // Extract the user ID from the user data
+    //         const { id } = userData;
+      
+    //         // Update the user ID state variable
+    //         setUserId(id);
+    //       } catch (error) {
+    //         console.error('Error fetching user:', error);
+    //       }
+    //     };
+      
+    //     fetchUser();
+    //   }, []);
+
+      const handleLogout = () => {
+        // Clear the isLoggedIn value from local storage
+        localStorage.removeItem('isLoggedIn');
+      
+        // Perform any additional logout-related tasks (e.g., clearing user data)
+        localStorage.removeItem('userID');
+      
+        // Redirect the user to the login page or perform any desired navigation
+        navigate("/")
+      };
+
   return (
     <div className='home-page'>
         <div className="oval-horizontal"></div>
         <div className="oval-vertical"></div>
         <div className="header">
             <div className="buttons">
-                <button className="login-button">Login</button>
-                <button className="signup-button">Sign Up</button>
+            {isLoggedIn ? (
+            // Render the logout button
+            <button className="logout-button" onClick={handleLogout}>Logout</button>
+            ) : (
+            // Render the login button
+            <Link to="/login"><button className="login-button">Login</button></Link>
+            )}
+                <Link to="/signup"><button className="signup-button">Sign Up</button></Link>
             </div>
             <Navbar />
         </div>
