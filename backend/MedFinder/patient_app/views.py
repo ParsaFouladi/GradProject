@@ -5,6 +5,7 @@ from .serializers import PatientSerializer,InsuranceSerializer
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from .permissions import IsOwner
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class PatientDetailApiView(generics.RetrieveAPIView):
     queryset = Patient.objects.all()
@@ -13,6 +14,7 @@ class PatientDetailApiView(generics.RetrieveAPIView):
 class PatientCreateApiView(generics.CreateAPIView):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
+    parser_classes = [MultiPartParser, FormParser]
 
 class PatientListApiView(generics.ListAPIView):
     queryset = Patient.objects.all()
