@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { BsBell } from "react-icons/bs";
 import Navbar from '../components/Navbar';
 import { FaCaretDown } from "react-icons/fa";
@@ -6,7 +6,7 @@ import { BiSearch } from "react-icons/bi";
 import { AiFillStar } from "react-icons/ai";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function FilteredList() {
 
@@ -19,6 +19,8 @@ function FilteredList() {
   const [specialtyOptions, setSpecialtyOptions] = useState([]);
   const [resetFilters, setResetFilters] = useState(false);
   const [doctorRatings, setDoctorRatings] = useState({});
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchDoctors('http://localhost:8000/doctors/scraped');
@@ -146,12 +148,23 @@ function FilteredList() {
     setResetFilters(true);
   };
 
+  const handleLogout = () => {
+    // Clear the isLoggedIn value from local storage
+    localStorage.removeItem('isLoggedIn');
+  
+    // Perform any additional logout-related tasks (e.g., clearing user data)
+    localStorage.removeItem('userID');
+  
+    // Redirect the user to the login page or perform any desired navigation
+    navigate("/")
+  };
+
   return (
     <div className='filtered-list-page'>
         <div className="oval-horizontal"></div>
         <div className="oval-vertical"></div>
         <div className="header">
-            <button>Logout</button>
+            <button onClick={handleLogout} style={{cursor: 'pointer'}}>Logout</button>
             <div className="right-side">
                 <div className="bell-icon-container">
                     <BsBell className='bell-icon'/>
@@ -246,10 +259,12 @@ function FilteredList() {
                         </div>
                         <div className="buttons">
                         <Link to={`/doctordetails/${doctor.id}`} className="read-feedback-button">
-                            <button>Read Feedback</button>
+                            Read Feedback
                         </Link>
                             
-                            <button>Check Schedule</button>
+                        <Link to={{ pathname: `/doctordetails/${doctor.id}`, state: { scrollToSection: true } }} className='check-schedule-button'>
+                          Check Schedule
+                        </Link>
                         </div>
 
                     </div>
