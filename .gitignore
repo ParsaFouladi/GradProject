@@ -130,3 +130,6 @@ dmypy.json
 scraping/urls.xlsx
 scraping/data.xlsx
 backend/MedFinder/doctor_app/data.xlsx
+
+#Add the media folder
+media/
