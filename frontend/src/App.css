@@ -242,10 +242,10 @@ a{
   overflow: hidden;
 }
 .home-page .oval-horizontal{
-  background-color: var(--pink-color-main);
+  background-color: var(--blue-color);
 }
 .home-page .oval-vertical{
-  background-color: var(--pink-color-main);
+  background-color: var(--blue-color);
 }
 .home-page .header{
   display: flex;
