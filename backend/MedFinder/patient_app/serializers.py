@@ -31,7 +31,7 @@ class PatientSerializer(serializers.ModelSerializer):
     
     insurance = InsuranceSerializerInPatient(many=True, required=False)
     user = UserSerializerWritePatient()
-    
+    role=serializers.CharField(default="patient",read_only=True)
 
     class Meta:
         model = Patient

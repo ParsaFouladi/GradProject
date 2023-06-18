@@ -34,6 +34,8 @@ class DoctorSerializerWrite(serializers.ModelSerializer):
 class DoctorSerializerRead(serializers.ModelSerializer):
     department = DepartmentSerializer()
     user = UserSerializerRead()
+    #Show that they are a doctor
+    role=serializers.CharField(default="doctor",read_only=True)
     class Meta:
         model = Doctor
         fields = '__all__'
@@ -56,6 +58,7 @@ class DoctorSerializerUpdate(serializers.ModelSerializer):
         return instance
 
 class ScrapedDoctorsSerializer(serializers.ModelSerializer):
+    role=serializers.CharField(default="doctor",read_only=True)
     class Meta:
         model = ScrapedDoctors
         fields = '__all__'
