@@ -63,7 +63,7 @@ class PatientSerializerUpdate(serializers.ModelSerializer):
     class Meta:
         model = Patient
         #For now, we will allow all fields to be updated
-        fields = ['first_name','last_name','contact_info','insurance','role','image','birthdate','gender']
+        fields = ['first_name','last_name','insurance','role','image','birth_date','gender']
     
     def update(self, instance, validated_data):
         insurance_data = validated_data.pop('insurance', [])
@@ -72,7 +72,7 @@ class PatientSerializerUpdate(serializers.ModelSerializer):
         instance.last_name = validated_data.get('last_name',instance.last_name)
         instance.insurance = validated_data.get('insurance',instance.insurance)
         instance.image = validated_data.get('image',instance.image)
-        instance.birthdate = validated_data.get('birthdate',instance.birthdate)
+        instance.birth_date = validated_data.get('birthdate',instance.birthdate)
         instance.gender=validated_data.get('gender',instance.gender)
 
         for insurance_id in insurance_data:
