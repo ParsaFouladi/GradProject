@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from .models import Patient,Insurance
-from .serializers import PatientSerializer,InsuranceSerializer
+from .serializers import PatientSerializer,InsuranceSerializer,PatientSerializerUpdate
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from .permissions import IsOwner
@@ -23,7 +23,7 @@ class PatientListApiView(generics.ListAPIView):
 class PatientUpdateApiView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, IsOwner]
     queryset = Patient.objects.all()
-    serializer_class = PatientSerializer
+    serializer_class = PatientSerializerUpdate
 
 class PatientDeleteApiView(generics.DestroyAPIView):
     queryset = Patient.objects.all()

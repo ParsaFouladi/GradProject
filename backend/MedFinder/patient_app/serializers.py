@@ -55,26 +55,35 @@ class PatientSerializer(serializers.ModelSerializer):
 
         return patient
 
+    
+class PatientSerializerUpdate(serializers.ModelSerializer):
+    #user=UserSerializerRead()
+    insurance = InsuranceSerializerInPatient(many=True, required=False)
+    role=serializers.CharField(default="patient",read_only=True)
+    class Meta:
+        model = Patient
+        #For now, we will allow all fields to be updated
+        fields = ['first_name','last_name','contact_info','insurance','role','image','birthdate','gender']
+    
     def update(self, instance, validated_data):
-        contact_info_data = validated_data.pop('contact_info')
-        insurance_data = validated_data.pop('insurance')
+        insurance_data = validated_data.pop('insurance', [])
 
-        contact_info = instance.contact_info
-        insurance = instance.insurance
+        instance.first_name = validated_data.get('first_name',instance.first_name)
+        instance.last_name = validated_data.get('last_name',instance.last_name)
+        instance.insurance = validated_data.get('insurance',instance.insurance)
+        instance.image = validated_data.get('image',instance.image)
+        instance.birthdate = validated_data.get('birthdate',instance.birthdate)
+        instance.gender=validated_data.get('gender',instance.gender)
 
-        contact_info.phone_number = contact_info_data.get('phone_number', contact_info.phone_number)
-        contact_info.address = contact_info_data.get('address', contact_info.address)
-        contact_info.save()
+        for insurance_id in insurance_data:
+            try:
+                if insurance_id['id'] in instance.insurance.values_list('id', flat=True):
+                    continue
+                insurance = Insurance.objects.get(pk=insurance_id['id'])
+                instance.insurance.add(insurance)
+            except Insurance.DoesNotExist:
+                raise ValidationError(f"Insurance with ID {insurance_id} does not exist.")
 
-        insurance.insurance_number = insurance_data.get('insurance_number', insurance.insurance_number)
-        insurance.provider = insurance_data.get('provider', insurance.provider)
-        insurance.valid_from = insurance_data.get('valid_from', insurance.valid_from)
-        insurance.valid_to = insurance_data.get('valid_to', insurance.valid_to)
-        insurance.save()
-
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.save()
-
         return instance
 
