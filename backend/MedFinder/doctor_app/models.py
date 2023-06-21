@@ -36,6 +36,7 @@ class ScrapedDoctors(models.Model):
     speciality = models.CharField(max_length=500)
     url=models.CharField(max_length=10000)
     experience=models.CharField(max_length=10000)
+    experience_years=models.IntegerField(default=0)
     description=models.TextField(blank=True)
     image_url=models.CharField(max_length=10000)
     country = models.CharField(max_length=100, default='Country not provided')
@@ -44,6 +45,8 @@ class ScrapedDoctors(models.Model):
     def average_rating(self):
         reviews = ReviewScraped.objects.filter(doctor=self)
         return sum([review.rating for review in reviews]) / len(reviews) if reviews else 0
+    
+
 
     def __str__(self):
         return '%s: %s' % (self.name, self.specialty)

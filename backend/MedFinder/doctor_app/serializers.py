@@ -57,6 +57,7 @@ class DoctorSerializerUpdate(serializers.ModelSerializer):
 
 class ScrapedDoctorsSerializer(serializers.ModelSerializer):
     average_rating = serializers.FloatField(read_only=True)  
+    experience_years = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = ScrapedDoctors

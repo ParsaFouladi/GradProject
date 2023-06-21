@@ -8,6 +8,10 @@ from .recommendations import get_doctor_recommendations
 
 from rest_framework.response import Response
 from django.db.models import Avg
+from django.db.models import F,IntegerField
+from django.db.models.functions import Cast,Substr
+
+
 
 # Create your views here.
 class DoctorDetailApiView(generics.RetrieveAPIView):
@@ -46,15 +50,23 @@ class ScrapedDoctorsListApiView(generics.ListAPIView):
     serializer_class = ScrapedDoctorsSerializer
 
     def get_queryset(self):
-        location = self.request.query_params.get('location', None)
-        speciality = self.request.query_params.get('speciality', None)
-        if location is not None and speciality is not None:
-            return ScrapedDoctors.objects.filter(location=location,speciality=speciality)
-        elif location is not None:
-            return ScrapedDoctors.objects.filter(location=location)
-        elif speciality is not None:
-            return ScrapedDoctors.objects.filter(speciality=speciality)
-        return ScrapedDoctors.objects.all()
+        queryset = super().get_queryset()
+        search = self.request.query_params.get('search')
+        specialty = self.request.query_params.get('specialty')
+        location = self.request.query_params.get('location')
+        experience_years = self.request.query_params.get('experiance')
+
+        if search:
+            queryset = queryset.filter(name__icontains=search)
+        if specialty:
+            #specialty equalas to the given value
+            queryset = queryset.filter(speciality__iexact=specialty)
+        if location:
+            queryset = queryset.filter(location__icontains=location)
+        if experience_years:
+            queryset = queryset.filter(experience_years__gte=experience_years)
+        return queryset
+            
 
 class ScrapedDoctorsDetailApiView(generics.RetrieveAPIView):
     queryset = ScrapedDoctors.objects.all()
