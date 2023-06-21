@@ -7,6 +7,7 @@ import { AiFillStar } from "react-icons/ai";
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import axios from '../api/axios';
 
 function FilteredList() {
 
@@ -27,7 +28,7 @@ function FilteredList() {
 
   useEffect(() => {
     fetchDoctors('http://localhost:8000/doctors/scraped');
-    fetchLocationOptions('http://localhost:8000/doctors/locations/?limit=30');
+    fetchLocationOptions();
     fetchSpecialtyOptions('http://localhost:8000/doctors/specialities/?limit=533');
   }, []);
 
@@ -91,11 +92,19 @@ function FilteredList() {
     return apiUrl;
   };
 
-  const fetchLocationOptions = async (url) => {
+  const fetchLocationOptions = async () => {
     try {
-      const response = await fetch(url);
-      const data = await response.json();
-      setLocationOptions(data.results);
+      let apiResponse = [];
+      let nextUrl = "http://localhost:8000/doctors/locations/";
+
+      while (nextUrl) {
+        const response = await axios.get(nextUrl);
+        const data = response.data;
+        apiResponse = apiResponse.concat(data.results);
+        nextUrl = data.next;
+      }
+
+      setLocationOptions(apiResponse);
     } catch (error) {
       console.error('Error fetching location options:', error);
     }
