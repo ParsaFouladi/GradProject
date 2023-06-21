@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import { FaCaretDown } from "react-icons/fa";
 import { BiSearch } from "react-icons/bi";
 import DoctorSlider from '../components/DoctorSlider';
+import Footer from '../components/Footer';
 import { Link, useLocation, useNavigate, } from 'react-router-dom';
 
 function Home() {
@@ -130,6 +131,7 @@ function Home() {
             </div>
         </div>
         <DoctorSlider />
+        <Footer />
     </div>
   )
 }

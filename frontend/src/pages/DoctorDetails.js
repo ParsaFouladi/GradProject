@@ -5,7 +5,7 @@ import { FaCaretDown } from "react-icons/fa";
 import { BiSearch } from "react-icons/bi";
 import { AiFillStar } from "react-icons/ai";
 import { useParams, useLocation } from 'react-router-dom';
-
+import Footer from '../components/Footer';
 
 function DoctorDetails(props) {
     const {id} = useParams()
@@ -272,6 +272,7 @@ function DoctorDetails(props) {
                 </div> */}
             </div>
         </div>
+        <Footer />
     </div>
   )
 }

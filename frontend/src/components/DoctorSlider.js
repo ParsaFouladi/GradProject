@@ -1,6 +1,7 @@
 import React from 'react'
 import Slider from "react-slick";
 import doctorImg from "../imgs/doctor.png"
+import axios from 'axios';
 import { BsFillCaretRightFill, BsFillCaretLeftFill } from "react-icons/bs";
 
 function SampleNextArrow({onClick}) {

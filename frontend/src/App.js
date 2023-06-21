@@ -9,6 +9,7 @@ import { Routes, Route } from 'react-router-dom';
 import DoctorHome from './pages/DoctorHome';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Account from './pages/Account';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       <Route path="/doctorpanel" element={<DoctorHome />} />
       <Route path="/doctordetails/:id" element={<DoctorDetails/>} />
       <Route path="/doctors" element={<FilteredList />} />
+      <Route path='/patients/:id' element={<Account />} />
     </Routes>
   );
 }

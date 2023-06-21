@@ -2,11 +2,11 @@ import React, { useRef } from 'react'
 import { BsBell } from "react-icons/bs";
 import Navbar from '../components/Navbar';
 import { FaCaretDown } from "react-icons/fa";
-import { BiSearch } from "react-icons/bi";
+import { BiSearch, BiReset } from "react-icons/bi";
 import { AiFillStar } from "react-icons/ai";
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 function FilteredList() {
 
@@ -19,8 +19,11 @@ function FilteredList() {
   const [specialtyOptions, setSpecialtyOptions] = useState([]);
   const [resetFilters, setResetFilters] = useState(false);
   const [doctorRatings, setDoctorRatings] = useState({});
+  const [searchQuery, setSearchQuery] = useState('');
+  const isLoggedIn = getLoginStatus();
 
   const navigate = useNavigate();
+
 
   useEffect(() => {
     fetchDoctors('http://localhost:8000/doctors/scraped');
@@ -29,10 +32,10 @@ function FilteredList() {
   }, []);
 
   useEffect(() => {
-    if (selectedLocation || selectedSpecialty || resetFilters) {
+    if (selectedLocation || selectedSpecialty || resetFilters || searchQuery) {
       fetchDoctorsWithFilters();
     }
-  }, [selectedLocation, selectedSpecialty, resetFilters]);
+  }, [selectedLocation, selectedSpecialty, resetFilters, searchQuery]);
 
   const fetchDoctors = async (url) => {
     try {
@@ -79,6 +82,11 @@ function FilteredList() {
     }
     if (selectedSpecialty) {
       apiUrl += `${selectedLocation ? '&' : '?'}speciality=${selectedSpecialty}`;
+    }
+    if (searchQuery) {
+      apiUrl += `${selectedLocation || selectedSpecialty ? '&' : '?'}search=${encodeURIComponent(
+        searchQuery
+      )}`;
     }
     return apiUrl;
   };
@@ -148,6 +156,11 @@ function FilteredList() {
     setResetFilters(true);
   };
 
+  const handleSearchQueryChange = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+  };
+
   const handleLogout = () => {
     // Clear the isLoggedIn value from local storage
     localStorage.removeItem('isLoggedIn');
@@ -159,21 +172,39 @@ function FilteredList() {
     navigate("/")
   };
 
+  function getLoginStatus() {
+    return localStorage.getItem('isLoggedIn') === 'true';
+  }
+
   return (
     <div className='filtered-list-page'>
         <div className="oval-horizontal"></div>
         <div className="oval-vertical"></div>
         <div className="header">
-            <button onClick={handleLogout} style={{cursor: 'pointer'}}>Logout</button>
+        {isLoggedIn ? (
+            // Render the logout button
+            <button className="logout-button" onClick={handleLogout} style={{cursor: "pointer"}}>Logout</button>
+            ) : (
+            // Render the login button
+            <Link to="/login"><button className="login-button" style={{cursor: "pointer"}}>Login</button></Link>
+            )}
             <div className="right-side">
-                <div className="bell-icon-container">
+                {/* <div className="bell-icon-container">
                     <BsBell className='bell-icon'/>
-                </div>
+                </div> */}
                 <Navbar />
             </div>
         </div>
         <div className="container">
         <div className="search-box">
+            <div className="search-input-box">
+              <input
+                type="text"
+                placeholder="Search by name"
+                value={searchQuery}
+                onChange={handleSearchQueryChange}
+              />
+            </div>    
             <div className="select-box">
                 <select 
                     name="specialty"
@@ -203,39 +234,15 @@ function FilteredList() {
             </div>
             <div className="select-box">
                 <select name="" id="">
-                    <option value="">14:00 - 16:00</option>
-                    <option value="">Hour 1</option>
-                    <option value="">Hour 2</option>
-                    <option value="">Hour 3</option>
-                    <option value="">Hour 4</option>
-                </select>
-                <FaCaretDown className="chevron-down"/>
-            </div>
-            <div className="select-box">
-                <select name="" id="">
                     <option value="">Insu. Available</option>
                     <option value="">Insu. Not Available</option>
-                </select>
-                <FaCaretDown className="chevron-down"/>
-            </div>
-            <div className="select-box">
-                <select name="" id="">
-                   <option value="">Male</option>
-                    <option value="">Female</option>
-                </select>
-                <FaCaretDown className="chevron-down"/>
-            </div>
-            <div className="select-box">
-                <select name="" id="">
-                    <option value="">Physician</option>
-                    <option value="">Other</option>
                 </select>
                 <FaCaretDown className="chevron-down"/>
             </div>
                 <div className="search-icon-container">
                 <BiSearch className='search-icon'/>
                 </div>
-                <button onClick={handleResetFilters} className='reset-filters-btn'>Reset Filters</button>
+                <button onClick={handleResetFilters} className='reset-filters-btn'><BiReset className='reset-icon'/>Reset Filters</button>
             </div>
         <div className="filtered-data">
 
@@ -275,6 +282,7 @@ function FilteredList() {
             <button onClick={handleNextPage} disabled={!nextPage}>Next</button>
         </div>
         </div>
+        <Footer />
     </div>
   )
 }
