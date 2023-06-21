@@ -1,13 +1,16 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 function Navbar() {
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const isOnDoctorsPage = location.pathname === '/doctors';
 
     let accountUrl = '';
         const role = localStorage.getItem('role');
         const userId = localStorage.getItem('userId');
+        
 
         if (role === 'doctor') {
             accountUrl = `/doctors/${userId}`;
@@ -23,7 +26,11 @@ function Navbar() {
     <div className='navigation-bar'>
         <ul className='nav-links'>
                 <li>
-                    <Link to="/doctors" className='nav-link'>Our Doctors</Link>
+                    {isOnDoctorsPage ? (
+                        <Link to="/" className='nav-link'>Home</Link>
+                    ) : (
+                        <Link to="/doctors" className='nav-link'>Our Doctors</Link>
+                    )}
                 </li>
                 <li>
                     <a href="#footer" className='nav-link'>About</a>
