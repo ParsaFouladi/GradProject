@@ -18,7 +18,7 @@ class Doctor(models.Model):
     speciality = models.CharField(max_length=50)
     availability = models.CharField(max_length=100)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-
+    country = models.CharField(max_length=100, default='Country not provided')
     def __str__(self):
         return '%s: %s' % (self.user.username, self.specialty)
 
@@ -38,48 +38,50 @@ class ScrapedDoctors(models.Model):
     experience=models.CharField(max_length=10000)
     description=models.TextField(blank=True)
     image_url=models.CharField(max_length=10000)
+    country = models.CharField(max_length=100, default='Country not provided')
+    
+    @property
+    def average_rating(self):
+        reviews = ReviewScraped.objects.filter(doctor=self)
+        return sum([review.rating for review in reviews]) / len(reviews) if reviews else 0
 
     def __str__(self):
         return '%s: %s' % (self.name, self.specialty)
 
 class ReviewScraped(models.Model):
     doctor = models.ForeignKey(ScrapedDoctors, on_delete=models.CASCADE)
-
     comment = models.TextField(blank=True)
-    
+    rating = models.FloatField(default=0.0)  # Add this line to create a database field for the rating
 
-    @property
-    def rating(self):
+    def save(self, *args, **kwargs):  # Overwrite the save method
         sid = SentimentIntensityAnalyzer()
         sentiment_scores = sid.polarity_scores(self.comment)
         compound_score = sentiment_scores['compound']
 
         # Map the compound score to a rating scale, e.g., 1 to 5
         if compound_score >= 0.5:
-            rating = 5
+            self.rating = 5
         elif compound_score >= 0.3:
-            rating = 4
+            self.rating = 4
         elif compound_score >= 0.1:
-            rating = 3
+            self.rating = 3
         elif compound_score >= -0.1:
-            rating = 2
+            self.rating = 2
         else:
-            rating = 1
+            self.rating = 1
 
-        return rating
-
+        super().save(*args, **kwargs)  # Don't forget to call the parent's save method
 
     def __str__(self):
         return '%s: %s' % (self.doctor.name, self.rating)
     
-# class Review(models.Model):
-#     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
-#     patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
-#     rating = models.IntegerField()
-#     comment = models.TextField(blank=True)
+class DoctorRecommendation(models.Model):
+    doctor = models.OneToOneField(ScrapedDoctors, on_delete=models.CASCADE)
+    recommendation_score = models.FloatField(default=0)
 
-#     def __str__(self):
-#         return '%s: %s' % (self.doctor.user.username, self.rating)
+    def __str__(self):
+        return '%s: %f' % (self.doctor.name, self.recommendation_score)
+
 
 class TimeSlot(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
