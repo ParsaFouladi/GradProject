@@ -72,7 +72,7 @@ class PatientSerializerUpdate(serializers.ModelSerializer):
         instance.last_name = validated_data.get('last_name',instance.last_name)
         instance.insurance = validated_data.get('insurance',instance.insurance)
         instance.image = validated_data.get('image',instance.image)
-        instance.birth_date = validated_data.get('birthdate',instance.birthdate)
+        instance.birth_date = validated_data.get('birth_date',instance.birthdate)
         instance.gender=validated_data.get('gender',instance.gender)
 
         for insurance_id in insurance_data:
