@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Doctor, Department, DoctorContactInfo,ScrapedDoctors,ReviewScraped,TimeSlotScraped
+from .models import Doctor, Department, DoctorContactInfo,ScrapedDoctors,ReviewScraped,TimeSlotScraped, DoctorRecommendation
 from django.contrib.auth.models import User
 
 class UserSerializerWrite(serializers.ModelSerializer):
@@ -34,8 +34,6 @@ class DoctorSerializerWrite(serializers.ModelSerializer):
 class DoctorSerializerRead(serializers.ModelSerializer):
     department = DepartmentSerializer()
     user = UserSerializerRead()
-    #Show that they are a doctor
-    role=serializers.CharField(default="doctor",read_only=True)
     class Meta:
         model = Doctor
         fields = '__all__'
@@ -58,7 +56,8 @@ class DoctorSerializerUpdate(serializers.ModelSerializer):
         return instance
 
 class ScrapedDoctorsSerializer(serializers.ModelSerializer):
-    role=serializers.CharField(default="doctor",read_only=True)
+    average_rating = serializers.FloatField(read_only=True)  
+
     class Meta:
         model = ScrapedDoctors
         fields = '__all__'
@@ -87,3 +86,10 @@ class TimeSlotScrapedSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     
+#top-rated 
+class DoctorRecommendationSerializer(serializers.ModelSerializer):
+    doctor = ScrapedDoctorsSerializer()
+
+    class Meta:
+        model = DoctorRecommendation
+        fields = '__all__'

@@ -1,11 +1,13 @@
 from rest_framework import generics
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from .models import Doctor,ScrapedDoctors,ReviewScraped,TimeSlotScraped
+from .models import Doctor,ScrapedDoctors,ReviewScraped,TimeSlotScraped, DoctorRecommendation
 from .permissions import IsOwner
-from .serializers import ScrapedDoctorsSerializer,DoctorSerializerRead,DoctorSerializerWrite,DoctorSerializerUpdate,ReviewScrapedSerializer,ScrapedDoctorsLocationSerializer,ScrapedDoctorsSpecialitySerializer,TimeSlotScrapedSerializer
+from .serializers import ScrapedDoctorsSerializer,DoctorSerializerRead,DoctorSerializerWrite,DoctorSerializerUpdate,ReviewScrapedSerializer,ScrapedDoctorsLocationSerializer,ScrapedDoctorsSpecialitySerializer,TimeSlotScrapedSerializer, DoctorRecommendationSerializer
+from .recommendations import get_doctor_recommendations
 
 from rest_framework.response import Response
+from django.db.models import Avg
 
 # Create your views here.
 class DoctorDetailApiView(generics.RetrieveAPIView):
@@ -44,17 +46,15 @@ class ScrapedDoctorsListApiView(generics.ListAPIView):
     serializer_class = ScrapedDoctorsSerializer
 
     def get_queryset(self):
-        queryset = super().get_queryset()
-        search = self.request.query_params.get('search', None)
         location = self.request.query_params.get('location', None)
         speciality = self.request.query_params.get('speciality', None)
-        if search:
-            queryset = queryset.filter(name__icontains=search)
-        if speciality:
-            queryset = queryset.filter(specialty__icontains=speciality)
-        if location:
-            queryset = queryset.filter(location__icontains=location)
-        return queryset
+        if location is not None and speciality is not None:
+            return ScrapedDoctors.objects.filter(location=location,speciality=speciality)
+        elif location is not None:
+            return ScrapedDoctors.objects.filter(location=location)
+        elif speciality is not None:
+            return ScrapedDoctors.objects.filter(speciality=speciality)
+        return ScrapedDoctors.objects.all()
 
 class ScrapedDoctorsDetailApiView(generics.RetrieveAPIView):
     queryset = ScrapedDoctors.objects.all()
@@ -101,7 +101,7 @@ class TimeSlotScrapedListApiView(generics.ListAPIView):
 
 
 
-
-
-
-    
+#top-rated     
+class TopRatedDoctorsListApiView(generics.ListAPIView):
+    queryset = ScrapedDoctors.objects.annotate(avg_rating=Avg('reviewscraped__rating')).order_by('-avg_rating')[:8] 
+    serializer_class = ScrapedDoctorsSerializer
