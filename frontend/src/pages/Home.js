@@ -18,35 +18,21 @@ function Home() {
 
     const navigate = useNavigate();
 
+    const navigateToDoctorsPage = () => {
+        navigate('/doctors');
+      };
+
     function getLoginStatus() {
         return localStorage.getItem('isLoggedIn') === 'true';
       }
-
-    //   useEffect(() => {
-    //     const fetchUser = async () => {
-    //       try {
-    //         // Fetch the logged-in user's data using your authentication mechanism
-    //         const userData = await fetchUserData(); // Replace with your own code to fetch user data
-      
-    //         // Extract the user ID from the user data
-    //         const { id } = userData;
-      
-    //         // Update the user ID state variable
-    //         setUserId(id);
-    //       } catch (error) {
-    //         console.error('Error fetching user:', error);
-    //       }
-    //     };
-      
-    //     fetchUser();
-    //   }, []);
 
       const handleLogout = () => {
         // Clear the isLoggedIn value from local storage
         localStorage.removeItem('isLoggedIn');
       
         // Perform any additional logout-related tasks (e.g., clearing user data)
-        localStorage.removeItem('userID');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('role');
       
         // Redirect the user to the login page or perform any desired navigation
         navigate("/")
@@ -124,8 +110,8 @@ function Home() {
                         </select>
                         <FaCaretDown className="chevron-down"/>
                     </div>
-                    <div className="search-icon-container">
-                        <BiSearch className='search-icon'/>
+                    <div className="search-icon-container" onClick={navigateToDoctorsPage}>
+                        <BiSearch className='search-icon' />
                     </div>
                 </div>
             </div>

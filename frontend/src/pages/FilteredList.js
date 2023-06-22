@@ -17,9 +17,11 @@ function FilteredList() {
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
   const [selectedExperience, setSelectedExperience] = useState('');
+  const [selectedInsurance, setSelectedInsurance] = useState('');
   const [locationOptions, setLocationOptions] = useState([]);
   const [specialtyOptions, setSpecialtyOptions] = useState([]);
   const [experienceOptions, setExperienceOptions] = useState([]);
+  const [insuranceOptions, setInsuranceOptions] = useState([]);
   const [resetFilters, setResetFilters] = useState(false);
   const [doctorRatings, setDoctorRatings] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,13 +33,14 @@ function FilteredList() {
     fetchDoctors('http://localhost:8000/doctors/scraped');
     fetchLocationOptions();
     fetchSpecialtyOptions();
+    fetchInsuranceOptions();
   }, []);
 
   useEffect(() => {
-    if (selectedLocation || selectedSpecialty || selectedExperience || resetFilters || searchQuery) {
+    if (selectedLocation || selectedSpecialty || selectedExperience || resetFilters || selectedInsurance || searchQuery) {
       fetchDoctorsWithFilters();
     }
-  }, [selectedLocation, selectedSpecialty, selectedExperience, resetFilters, searchQuery]);
+  }, [selectedLocation, selectedSpecialty, selectedExperience, resetFilters, selectedInsurance, searchQuery]);
 
   const fetchDoctors = async (url) => {
     try {
@@ -98,6 +101,10 @@ function FilteredList() {
     if (selectedExperience) {
       params.push(`experiance=${selectedExperience}`);
     }
+
+    if (selectedInsurance) {
+      params.push(`insurance=${selectedInsurance}`);
+    }
     
     if (searchQuery) {
       params.push(`search=${encodeURIComponent(searchQuery)}`);
@@ -130,17 +137,15 @@ function FilteredList() {
     }
   };
 
-
-
-  // const fetchSpecialtyOptions = async (url) => {
-  //   try {
-  //     const response = await fetch(url);
-  //     const data = await response.json();
-  //     setSpecialtyOptions(data.results);
-  //   } catch (error) {
-  //     console.error('Error fetching specialty options:', error);
-  //   }
-  // };
+  const fetchInsuranceOptions = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/insurances');
+      const data = response.data;
+      setInsuranceOptions(data.results);
+    } catch (error) {
+      console.error('Error fetching insurance options:', error);
+    }
+  };
 
   const calculateAverageRating = (ratings) => {
     if (ratings.length === 0) {
@@ -211,6 +216,11 @@ function FilteredList() {
   const handleSearchQueryChange = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
+  };
+
+  const handleInsuranceChange = (event) => {
+    const insurance = event.target.value;
+    setSelectedInsurance(insurance);
   };
 
   const handleLogout = () => {
@@ -296,11 +306,27 @@ function FilteredList() {
                 </select>
                 <FaCaretDown className="chevron-down"/>
             </div>
+            <div className="select-box">
+              <select
+                name="insurance"
+                id="insurance"
+                value={selectedInsurance}
+                onChange={handleInsuranceChange}
+              >
+                <option value="">Select insurance</option>
+                {insuranceOptions.map((option) => (
+                  <option key={option.id} value={option.name}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+              <FaCaretDown className="chevron-down" />
+            </div>
                 <div className="search-icon-container">
                 <BiSearch className='search-icon'/>
                 </div>
                 <button onClick={handleResetFilters} className='reset-filters-btn'><BiReset className='reset-icon'/>Reset Filters</button>
-            </div>
+          </div>
         <div className="filtered-data">
 
             {doctors.map((doctor) => (

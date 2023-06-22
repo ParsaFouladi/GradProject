@@ -19,7 +19,7 @@ function Navbar() {
         } else {
         // Handle the case when the role is unknown or not set
         // You can redirect the user to an error page or a default account page
-        navigate('/error');
+        // navigate('/error');
         }
 
   return (
