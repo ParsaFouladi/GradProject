@@ -5,6 +5,7 @@ import useAuth from '../hooks/useAuth';
 import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import GoogleAuth from '../components/GoogleAuth';
 
 
 const LOGIN_URL = '/token/'
@@ -176,6 +177,7 @@ export default function Login() {
                     <button>Login</button>
                     <p>Please enter a valid email and password</p>
                     <p>Don't have an account yet? <a href="#">Sign up</a> it will only take few minutes!</p>
+                    <GoogleAuth />
                 </form>
             </div>
         </div>
