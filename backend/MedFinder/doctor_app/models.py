@@ -19,6 +19,13 @@ class Doctor(models.Model):
     availability = models.CharField(max_length=100)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     country = models.CharField(max_length=100, default='Country not provided')
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50, null=True)
+    phone_number = models.CharField(max_length=20,null=True,blank=True)
+    address = models.CharField(max_length=100,null=True,blank=True)
+    image = models.ImageField(upload_to='doctor_images', null=True, blank=True)
+    birth_date = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=10, null=True, blank=True)
     def __str__(self):
         return '%s: %s' % (self.user.username, self.specialty)
 
