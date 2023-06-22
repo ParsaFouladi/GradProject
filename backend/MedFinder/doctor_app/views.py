@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Doctor,ScrapedDoctors,ReviewScraped,TimeSlotScraped, DoctorRecommendation
 from .permissions import IsOwner
-from .serializers import ScrapedDoctorsSerializer,DoctorSerializerRead,DoctorSerializerWrite,DoctorSerializerUpdate,ReviewScrapedSerializer,ScrapedDoctorsLocationSerializer,ScrapedDoctorsSpecialitySerializer,TimeSlotScrapedSerializer, DoctorRecommendationSerializer
+from .serializers import ScrapedDoctorsSerializer,DoctorSerializerRead,DoctorSerializerWrite,DoctorSerializerUpdate,ReviewScrapedSerializer,ScrapedDoctorsLocationSerializer,ScrapedDoctorsSpecialitySerializer,TimeSlotScrapedSerializer, DoctorRecommendationSerializer,TimeSlotScrapedSerializerUpdate
 from .recommendations import get_doctor_recommendations
 
 from rest_framework.response import Response
@@ -114,6 +114,10 @@ class TimeSlotScrapedListApiView(generics.ListAPIView):
         if doctor_id is not None:
             return TimeSlotScraped.objects.filter(doctor=doctor_id)
         return TimeSlotScraped.objects.all()
+
+class TimeSlotScrapedUpdateApiView(generics.UpdateAPIView):
+    queryset = TimeSlotScraped.objects.all()
+    serializer_class = TimeSlotScrapedSerializerUpdate
 
 
 

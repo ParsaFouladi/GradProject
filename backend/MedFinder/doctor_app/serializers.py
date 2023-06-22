@@ -93,6 +93,12 @@ class TimeSlotScrapedSerializer(serializers.ModelSerializer):
         model = TimeSlotScraped
         fields = '__all__'
 
+class TimeSlotScrapedSerializerUpdate(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlotScraped
+        fields = ['status']
+        
+
     
 #top-rated 
 class DoctorRecommendationSerializer(serializers.ModelSerializer):

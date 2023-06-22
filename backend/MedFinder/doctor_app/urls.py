@@ -27,6 +27,7 @@ urlpatterns = [
 
     #Timeslots
     path('timeslots/<int:doctor>/', views.TimeSlotScrapedListApiView.as_view()),
+    path('timeslots/update/<int:pk>/', views.TimeSlotScrapedUpdateApiView.as_view()),
     
     #Top Rated Doctors
     path('top-rated/', views.TopRatedDoctorsListApiView.as_view()),
