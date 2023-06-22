@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar"
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
+import GoogleAuth from '../components/GoogleAuth';
 
 function Signup() {
 
@@ -333,6 +334,7 @@ function Signup() {
                 <div>1</div>
                 <h1>Registration Form</h1>
             </div>
+            <GoogleAuth />
             {renderPage()}
             {/* <div className="body">
                 <p>Register As</p>
