@@ -9,12 +9,15 @@ import {  BsCalendarRange } from "react-icons/bs";
 import { BiMaleFemale } from "react-icons/bi";
 import axios from '../api/axios';
 import Footer from '../components/Footer';
+import { useNavigate } from 'react-router-dom';
 
 
 function Account() {
 
     const [patient, setPatient] = useState(null);
   const patientId = localStorage.getItem('userId');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPatientData = async (userId) => {
@@ -48,6 +51,25 @@ function Account() {
     }
   }, [patientId]);
 
+  // Retrieve the booked timeslot from localStorage
+  const bookedTimeslot = JSON.parse(localStorage.getItem('bookedTimeslot'));
+
+  // Extract the start_time and end_time from the bookedTimeslot object
+  const { start_time, end_time } = bookedTimeslot || {};
+  
+  const handleLogout = () => {
+    // Clear the isLoggedIn value from local storage
+    localStorage.removeItem('role');
+    localStorage.removeItem('isLoggedIn');
+    
+    localStorage.removeItem('userId');
+    localStorage.removeItem('bookedTimeslot');
+    
+  
+    // Redirect the user to the login page or perform any desired navigation
+    navigate("/")
+  };
+
 
   return (
     <div className='account'>
@@ -56,7 +78,7 @@ function Account() {
         <div className="container">
             <div className="header">
                 <h2>Medfinder Account</h2>
-                <button>Logout</button>
+                <button onClick={handleLogout}>Logout</button>
             </div>
             
             {patient ? (
@@ -129,6 +151,17 @@ function Account() {
                                 <BiMaleFemale className="box-icon"/>
                             </div>
                         </div>
+                        {localStorage.getItem("bookedTimeslot") && (
+                          <div className="box">
+                            <div className="data">
+                                <h4>Appointment</h4>
+                                <p>{start_time} - {end_time}</p>
+                            </div>
+                            <div className="icon">
+                                <BiMaleFemale className="box-icon"/>
+                            </div>
+                          </div>
+                        )}
                     </div>
                 </div>
             </div> 

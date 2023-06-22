@@ -7,6 +7,7 @@ import { AiFillStar } from "react-icons/ai";
 import { useParams, useLocation } from 'react-router-dom';
 import Footer from '../components/Footer';
 import {BsEmojiSmileFill, BsEmojiFrownFill, BsEmojiNeutralFill} from "react-icons/bs"
+import axios from '../api/axios';
 
 function DoctorDetails(props) {
     const {id} = useParams()
@@ -127,8 +128,8 @@ function DoctorDetails(props) {
           return (
             <div
               key={ts.id}
-              className={`${ts.status === 'available' ? 'available' : ''}`}
-              onClick={() => ts.status === 'available' && handleTimeslotClick(ts)}
+              className={ts.status}
+              onClick={() => handleBooking(ts)}
             >
               {ts.status}
             </div>
@@ -142,19 +143,82 @@ function DoctorDetails(props) {
     }
   };
 
-  const handleBooking = () => {
-    // Update the status of the selected timeslot from available to booked
-    const updatedTimeslot = { ...selectedTimeslot, status: 'booked' };
-  
-    // Store the timeslot in local storage
-    const bookedTimeslot = JSON.stringify(updatedTimeslot);
-    localStorage.setItem('bookedTimeslot', bookedTimeslot);
-  
-    // Perform any other necessary actions
-    // ...
-  
-    // Clear the selected timeslot
-    setSelectedTimeslot(null);
+  const handleBooking = async (selectedTimeslot) => {
+    try {
+      // Update the status of the selected timeslot
+      const updatedTimeslot = {
+        ...selectedTimeslot,
+        status: 'booked'
+      };
+
+      const requestData = new FormData();
+      requestData.append('status', updatedTimeslot.status);
+
+      // Update the timeslot in the database
+      const response = await axios.put(`doctors/timeslots/update/${selectedTimeslot.id}/`, requestData ,{
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      // Save the booked timeslot to localStorage
+    localStorage.setItem('bookedTimeslot', JSON.stringify(updatedTimeslot));
+
+    // Show a pop-up message indicating successful booking
+    alert('The timeslot has been booked!');
+
+      if (response.ok) {
+        // Update the timeslot status in the UI
+        const updatedTimeSlots = timeSlots.map((ts) => {
+          if (ts.id === selectedTimeslot.id) {
+            return updatedTimeslot;
+          }
+          return ts;
+        });
+
+        setTimeSlots(updatedTimeSlots);
+
+        // Store the selected timeslot in local storage
+        localStorage.setItem('selectedTimeslot', JSON.stringify(updatedTimeslot));
+
+        // Show a success message to the user
+        alert('Time slot booked successfully!');
+        window.location.reload();
+      } else {
+        throw new Error('Failed to update timeslot.');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const renderTimeSlotTable = () => {
+    return (
+      <table className="timetable" ref={timeTableRef}>
+        <thead>
+          <tr>
+            <th>Time</th>
+            {daysOfWeek.map((day) => (
+              <th key={day}>{day}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {Array.from({ length: 24 }).map((_, index) => (
+            <tr key={index}>
+              <td>{`${index.toString().padStart(2, '0')}:00 - ${index
+                .toString()
+                .padStart(2, '0')}:59`}</td>
+              {daysOfWeek.map((day) => (
+                <td key={day}>
+                  {renderTimeSlotInfo(day, index)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    );
   };
 
   const handleScrollToTimetable = () => {
@@ -229,39 +293,22 @@ function DoctorDetails(props) {
                 </div>
                 <div className="table-container">
                   <h2>Check Out Doctor Timetable</h2>
-                {timeSlots.length > 0 ? (
-                <table className='timetable' ref={timeTableRef}>
-                  <thead>
-                    <tr>
-                      <th>Time</th>
-                      {daysOfWeek.map((day) => (
-                        <th key={day}>{day}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Array.from({ length: 24 }).map((_, index) => (
-                      <tr key={index}>
-                        <td>{`${index.toString().padStart(2, '0')}:00 - ${index
-                          .toString()
-                          .padStart(2, '0')}:59`}</td>
-                        {daysOfWeek.map((day) => (
-                          <td key={day}>
-                            {renderTimeSlotInfo(day, index)}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <div>No time slots available.</div>
-              )}
+                  {renderTimeSlotTable()}
             </div>
                 {/* <div className="week-navigation">
                     <button onClick={handlePreviousWeek}>Previous Week</button>
                     <button onClick={handleNextWeek}>Next Week</button>
                 </div> */}
+                {/* {selectedTimeslot && (
+                  <div className="modal">
+                    <div className="modal-content">
+                      <h3>Book Timeslot</h3>
+                      <p>Are you sure you want to book this timeslot?</p>
+                      <button onClick={handleBooking}>Book</button>
+                      <button onClick={() => setSelectedTimeslot(null)}>Cancel</button>
+                    </div>
+                  </div>
+                )} */}
             </div>
         </div>
         <Footer />
