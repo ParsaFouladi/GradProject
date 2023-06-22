@@ -173,3 +173,13 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "SIGNING_KEY": SECRET_KEY,
 }
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": "748160997720-4b0ppcvfvpj79g8uql68p13vai5r7qb5.apps.googleusercontent.com",
+            "secret": "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",
+            "key": ""
+        }
+    }
+}
