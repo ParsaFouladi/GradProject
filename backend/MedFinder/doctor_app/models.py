@@ -27,7 +27,7 @@ class Doctor(models.Model):
     birth_date = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, null=True, blank=True)
     def __str__(self):
-        return '%s: %s' % (self.user.username, self.specialty)
+        return '%s: %s' % (self.user.username, self.speciality)
 
 class DoctorContactInfo(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
@@ -57,7 +57,7 @@ class ScrapedDoctors(models.Model):
 
 
     def __str__(self):
-        return '%s: %s' % (self.name, self.specialty)
+        return '%s: %s' % (self.name, self.speciality)
 
 class ReviewScraped(models.Model):
     doctor = models.ForeignKey(ScrapedDoctors, on_delete=models.CASCADE)
