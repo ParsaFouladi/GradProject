@@ -29,6 +29,8 @@ urlpatterns = [
     path('doctors/',include("doctor_app.urls")),
     path('patients/',include("patient_app.urls_patients")),
     path('insurances/',include("patient_app.urls_insurances")),
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+
 
     # YOUR PATTERNS
     path('schema/', SpectacularAPIView.as_view(), name='schema'),
