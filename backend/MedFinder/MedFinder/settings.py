@@ -44,7 +44,19 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "rest_framework_simplejwt",
     "corsheaders",
+    
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'dj_rest_auth',
+    'google_app',
+    'rest_framework.authtoken',  
+
 ]
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -84,9 +96,9 @@ WSGI_APPLICATION = "MedFinder.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "dbMedFinder",
+        "NAME": "error",
         "USER": "postgres",
-        "PASSWORD": "AtoZis26?",
+        "PASSWORD": "rowaalqaisi",
         "HOST": "127.0.0.1",
         "PORT": "5432",
     }
