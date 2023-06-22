@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import GoogleAuth from '../components/GoogleAuth';
+import { GoogleLogin } from 'react-google-login';
 
 
 const LOGIN_URL = '/token/'
@@ -79,6 +79,17 @@ export default function Login() {
 
     }
 
+    const responseGoogle = (response) => {
+        // Send a POST request to Django with the one-time-use code
+        axios.post('http://localhost:8000/dj-rest-auth/google/', {
+            access_token: response.code,  // This is the one-time-use code
+        }).then(response => {
+            // The response from Django should contain the user's information and a session token
+            console.log(response.data);
+        }).catch(error => {
+            console.error(error);
+        });
+    }
     function setLoginStatus(status) {
         localStorage.setItem('isLoggedIn', status);
       }
@@ -177,8 +188,14 @@ export default function Login() {
                     <button>Login</button>
                     <p>Please enter a valid email and password</p>
                     <p>Don't have an account yet? <a href="#">Sign up</a> it will only take few minutes!</p>
-                    <GoogleAuth />
                 </form>
+                <GoogleLogin
+                            clientId="748160997720-4b0ppcvfvpj79g8uql68p13vai5r7qb5.apps.googleusercontent.com"
+                            buttonText="Login with Google"
+                            onSuccess={responseGoogle}
+                            onFailure={responseGoogle}
+                            cookiePolicy={'single_host_origin'}
+                        />
             </div>
         </div>
     </div>}
