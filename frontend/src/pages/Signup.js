@@ -54,47 +54,66 @@ function Signup() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Perform form submission or data processing here
+      
         try {
-            if (formData.userType === 'doctor') {
-              const {userType, firstName, lastName, phoneNumber, address, birthDate, gender, email, password, hospitalName, medicalSpecialty, photo } = formData;
-        
-              const doctorRequestBody = {
-                department: { name: hospitalName },
-                user: { username: email, password },
-                specialty: medicalSpecialty,
-                availability: 'isAvailable',
-              };
-
-              
-        
-              await axios.post('/doctors/create/', doctorRequestBody);
-              console.log('Registered as a doctor!');
-              navigate('/doctorpanel')
-            } else if (formData.userType === 'patient') {
-
-                const {userType, firstName, lastName, phoneNumber, address, birthDate, gender, email, password, hospitalName, medicalSpecialty, photo } = formData;
-
-                const patientRequestBody = {
-                    insurance: [{ id: 1 }],
-                    user: { username: email, password },
-                    first_name: firstName,
-                    last_name: lastName,
-                    phone_number: phoneNumber,
-                    address: address,
-                  }
-              // Handle patient registration
-              await axios.post('/patients/create/', patientRequestBody);
-              console.log('Registered as a patient!');
-              navigate('/')
-            }
-          } catch (error) {
-                console.error(error);
-            }
-
-        console.log(formData);
+          const {
+            userType,
+            firstName,
+            lastName,
+            phoneNumber,
+            address,
+            birthDate,
+            gender,
+            email,
+            password,
+            hospitalName,
+            medicalSpecialty,
+            photo,
+          } = formData;
+      
+          const requestData = new FormData();
+        //   requestData.append('userType', userType);
+        //   requestData.append('firstName', firstName);
+        //   requestData.append('lastName', lastName);
+        //   requestData.append('phoneNumber', phoneNumber);
+        //   requestData.append('address', address);
+        //   requestData.append('birthDate', birthDate);
+        //   requestData.append('gender', gender);
+        //   requestData.append('email', email);
+        //   requestData.append('password', password);
+      
+          if (userType === 'doctor') {
+            requestData.append('department', JSON.stringify({ name: hospitalName }));
+            requestData.append('user', JSON.stringify({ username: email, password }));
+            requestData.append('specialty', medicalSpecialty);
+            requestData.append('availability', 'isAvailable');
+          } else if (userType === 'patient') {
+            requestData.append('insurance', JSON.stringify([{ id: 1 }]));
+            // requestData.append('user', JSON.stringify({ username: email, password }));
+            requestData.append('user.username', email);
+            requestData.append('user.password', password);
+            requestData.append('first_name', firstName);
+            requestData.append('last_name', lastName);
+            requestData.append('phone_number', phoneNumber);
+            requestData.append('address', address);
+            requestData.append('image', photo);
+            requestData.append('birth_date', birthDate);
+            requestData.append('gender', gender);
+          }
+      
+          await axios.post(`/${userType}s/create/`, requestData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+      
+          console.log(`Registered as a ${userType}!`);
+          navigate(userType === 'doctor' ? '/doctorpanel' : '/');
+        } catch (error) {
+          console.error(error);
+        }
+      
         // Reset form state
-        // setCurrentPage(1);
         setFormData({
           userType: '',
           firstName: '',
@@ -110,7 +129,7 @@ function Signup() {
           hospitalName: '',
           photo: null,
         });
-    };
+      };
 
     const renderPage = () => {
         switch (currentPage) {
@@ -299,7 +318,7 @@ function Signup() {
             );
           case 3:
             return (
-              <div className='body-3'>
+              <form onSubmit={handleSubmit} className='body-3'>
                 <div className="image-container">
                     <h2>Upload Your Image</h2>
                     <p>png, jpg files are allowed only</p>
@@ -312,8 +331,8 @@ function Signup() {
                 <button type="button" onClick={previousPage}>
                     Previous
                 </button>
-                <button type="submit" onClick={handleSubmit}>Submit</button>
-              </div>
+                <button type="submit">Submit</button>
+              </form>
             );
           default:
             return null;
