@@ -25,11 +25,10 @@ function FilteredList() {
 
   const navigate = useNavigate();
 
-
   useEffect(() => {
     fetchDoctors('http://localhost:8000/doctors/scraped');
     fetchLocationOptions();
-    fetchSpecialtyOptions('http://localhost:8000/doctors/specialities/?limit=533');
+    fetchSpecialtyOptions();
   }, []);
 
   useEffect(() => {
@@ -56,21 +55,26 @@ function FilteredList() {
     try {
       const baseUrl = 'http://localhost:8000/doctors/scraped';
       let apiUrl = buildApiUrl(baseUrl);
-  
+
       if (resetFilters) {
         setSelectedLocation('');
         setSelectedSpecialty('');
         setResetFilters(false);
         apiUrl = baseUrl;
       }
-  
+
       const response = await fetch(apiUrl);
       const data = await response.json();
       const filteredDoctors = data.results;
+
+      console.log(filteredDoctors);
+
+      // Fetch and update doctor ratings for filtered doctors
+      await fetchDoctorRatings(filteredDoctors);
+
       setDoctors(filteredDoctors);
       setNextPage(data.next);
       setPreviousPage(data.previous);
-      await fetchDoctorRatings(filteredDoctors);
     } catch (error) {
       console.error('Error fetching doctors:', error);
     }
@@ -78,54 +82,75 @@ function FilteredList() {
 
   const buildApiUrl = (baseUrl) => {
     let apiUrl = baseUrl;
+    const params = [];
+
     if (selectedLocation) {
-      apiUrl += `?location=${selectedLocation}`;
+      params.push(`location=${selectedLocation}`);
     }
+
     if (selectedSpecialty) {
-      apiUrl += `${selectedLocation ? '&' : '?'}speciality=${selectedSpecialty}`;
+      params.push(`specialty=${selectedSpecialty}`);
     }
+    
     if (searchQuery) {
-      apiUrl += `${selectedLocation || selectedSpecialty ? '&' : '?'}search=${encodeURIComponent(
-        searchQuery
-      )}`;
+      params.push(`search=${encodeURIComponent(searchQuery)}`);
     }
+
+    if (params.length > 0) {
+      apiUrl += `?${params.join('&')}`;
+    }
+
     return apiUrl;
   };
 
   const fetchLocationOptions = async () => {
     try {
-      let apiResponse = [];
-      let nextUrl = "http://localhost:8000/doctors/locations/";
-
-      while (nextUrl) {
-        const response = await axios.get(nextUrl);
-        const data = response.data;
-        apiResponse = apiResponse.concat(data.results);
-        nextUrl = data.next;
-      }
-
-      setLocationOptions(apiResponse);
+      const response = await axios.get('http://localhost:8000/doctors/locations/?limit=194');
+      const data = response.data;
+      setLocationOptions(data.results);
     } catch (error) {
       console.error('Error fetching location options:', error);
     }
   };
 
-  const fetchSpecialtyOptions = async (url) => {
+  const fetchSpecialtyOptions = async () => {
     try {
-      const response = await fetch(url);
-      const data = await response.json();
+      const response = await axios.get('http://localhost:8000/doctors/specialities/?limit=533');
+      const data = response.data;
       setSpecialtyOptions(data.results);
     } catch (error) {
       console.error('Error fetching specialty options:', error);
     }
   };
 
+
+
+  // const fetchSpecialtyOptions = async (url) => {
+  //   try {
+  //     const response = await fetch(url);
+  //     const data = await response.json();
+  //     setSpecialtyOptions(data.results);
+  //   } catch (error) {
+  //     console.error('Error fetching specialty options:', error);
+  //   }
+  // };
+
+  const calculateAverageRating = (ratings) => {
+    if (ratings.length === 0) {
+      return 0;
+    }
+    const totalRating = ratings.reduce((accumulator, rating) => accumulator + rating, 0);
+    return totalRating / ratings.length;
+  };
+
   const fetchDoctorRatings = async (doctors) => {
     try {
       const ratingsPromises = doctors.map(async (doctor) => {
-        const response = await fetch(`http://localhost:8000/doctors/reviews/${doctor.id}`);
+        const response = await fetch(`http://localhost:8000/doctors/reviews/?doctor_id=${doctor.id}`);
         const data = await response.json();
-        return { doctorId: doctor.id, rating: data.rating };
+        const ratings = data.results.map((review) => review.rating);
+        const averageRating = calculateAverageRating(ratings);
+        return { doctorId: doctor.id, rating: averageRating };
       });
       const ratings = await Promise.all(ratingsPromises);
       const ratingsObj = {};
@@ -158,6 +183,7 @@ function FilteredList() {
   
   const handleSpecialtyChange = (event) => {
     const specialty = event.target.value;
+    console.log('Selected Specialty:', specialty);
     setSelectedSpecialty(specialty);
   };
 
@@ -267,9 +293,9 @@ function FilteredList() {
                                 <h5>{doctor.speciality}</h5>
                                 <h6>{doctor.location}</h6>
                                 <div className="rating">
-                                    {[...Array(doctorRatings[doctor.id] || 0)].map((_, index) => (
-                                        <AiFillStar key={index} className='star-filled-icon' />
-                                    ))}
+                                  {Array.from({ length: Math.floor(doctorRatings[doctor.id] || 0) }, (_, index) => (
+                                    <AiFillStar key={index} className='star-filled-icon' />
+                                  ))}
                                 </div>                 
                             </div>
                         </div>
