@@ -44,12 +44,12 @@ class InsuranceListApiView(generics.ListAPIView):
     serializer_class = InsuranceSerializer
 
 class InsuranceUpdateApiView(generics.UpdateAPIView):
-    permission_classes = [IsAuthenticated, IsAdminUser]
+#    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Insurance.objects.all()
     serializer_class = InsuranceSerializer
 
 class InsuranceDeleteApiView(generics.DestroyAPIView):
-    permission_classes = [IsAuthenticated, IsAdminUser]
+#    permission_classes = [IsAuthenticated, IsAdminUser]
     queryset = Insurance.objects.all()
     serializer_class = InsuranceSerializer
 

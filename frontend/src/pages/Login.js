@@ -94,27 +94,38 @@ export default function Login() {
         } catch (error) {
           console.log('Error getting patient:', error);
         }
-      
         try {
-          const response = await axios.get(DOCTORS_URL
-        //     , {
-        //     headers: { Authorization: `Bearer ${auth.accessToken}` },
-        //   }
-          );
-      
-          const doctors = response.data.results;
-          const doctor = doctors.find((d) => d.user.username === user);
-          if (doctor) {
-            const userId = doctor.id;
-            const role = doctor.role;
+            const response = await axios.get(`http://127.0.0.1:8000/doctors/get_doctor_id/?username=${user}`);
+        
+            const { doctor_id: userId, role } = response.data;
             localStorage.setItem('userId', userId);
             localStorage.setItem('role', role);
             // setUserIdAndRole(userId, role);
             return;
-          }
         } catch (error) {
-          console.log('Error getting doctor:', error);
+          console.log('Error getting patient:', error);
         }
+      
+        // try {
+        //   const response = await axios.get(DOCTORS_URL
+        // //     , {
+        // //     headers: { Authorization: `Bearer ${auth.accessToken}` },
+        // //   }
+        //   );
+      
+        //   const doctors = response.data.results;
+        //   const doctor = doctors.find((d) => d.user.username === user);
+        //   if (doctor) {
+        //     const userId = doctor.id;
+        //     const role = doctor.role;
+        //     localStorage.setItem('userId', userId);
+        //     localStorage.setItem('role', role);
+        //     // setUserIdAndRole(userId, role);
+        //     return;
+        //   }
+        // } catch (error) {
+        //   console.log('Error getting doctor:', error);
+        // }
       
         // Handle case where user ID and role are not found
         // You can display an error message or redirect to an appropriate page
