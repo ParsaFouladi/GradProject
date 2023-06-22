@@ -7,6 +7,8 @@ urlpatterns = [
     path('', views.DoctorListApiView.as_view()),
     path('update/<int:pk>/', views.DoctorUpdateApiView.as_view()),
     path('delete/<int:pk>/', views.DoctorDeleteApiView.as_view()),
+    #Get doctor id based on the username
+    path('get_doctor_id/', views.get_doctor_id),
 
     #Scraped Doctors
     path('scraped/', views.ScrapedDoctorsListApiView.as_view()),
