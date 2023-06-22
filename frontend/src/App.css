@@ -610,6 +610,7 @@ a{
 }
 .filtered-list-page .doctor .data .doctor-info h5{
   color: #4dacdd;
+  max-width: 400px;
 }
 .filtered-list-page .doctor .data .doctor-info h6{
   color: var(--grey-color-text);
@@ -1156,6 +1157,7 @@ a{
   background-color: #191919;
   padding: 70px 0 0;
   margin-top: 60px;
+  position: relative;
 }
 .footer .container{
   display: grid;
