@@ -296,6 +296,7 @@ function Signup() {
                     <button type="button" onClick={nextPage}>
                         Next
                     </button>
+                    <GoogleAuth />
                 </div>
             );
           case 3:
@@ -334,7 +335,6 @@ function Signup() {
                 <div>1</div>
                 <h1>Registration Form</h1>
             </div>
-            <GoogleAuth />
             {renderPage()}
             {/* <div className="body">
                 <p>Register As</p>
