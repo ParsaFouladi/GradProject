@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Doctor, Department, DoctorContactInfo,ScrapedDoctors,ReviewScraped,TimeSlotScraped, DoctorRecommendation
 from django.contrib.auth.models import User
+from patient_app.models import Insurance
 
 class UserSerializerWrite(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +12,11 @@ class UserSerializerRead(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username',)
+
+class InsuranceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Insurance
+        fields = ('id','name')
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
@@ -58,6 +64,7 @@ class DoctorSerializerUpdate(serializers.ModelSerializer):
 class ScrapedDoctorsSerializer(serializers.ModelSerializer):
     average_rating = serializers.FloatField(read_only=True)  
     experience_years = serializers.IntegerField(read_only=True)
+    insurance=InsuranceSerializer(many=True,read_only=True)
 
     class Meta:
         model = ScrapedDoctors

@@ -55,6 +55,7 @@ class ScrapedDoctorsListApiView(generics.ListAPIView):
         specialty = self.request.query_params.get('specialty')
         location = self.request.query_params.get('location')
         experience_years = self.request.query_params.get('experiance')
+        insurance = self.request.query_params.get('insurance')
 
         if search:
             queryset = queryset.filter(name__icontains=search)
@@ -65,6 +66,9 @@ class ScrapedDoctorsListApiView(generics.ListAPIView):
             queryset = queryset.filter(location__icontains=location)
         if experience_years:
             queryset = queryset.filter(experience_years__gte=experience_years)
+        if insurance:
+            #insurance is many to many field
+            queryset = queryset.filter(insurance__name__iexact=insurance)
         return queryset
             
 
