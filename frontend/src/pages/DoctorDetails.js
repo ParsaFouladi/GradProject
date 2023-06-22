@@ -17,6 +17,8 @@ function DoctorDetails(props) {
     const [timeSlots, setTimeSlots] = useState([]);
     const [currentWeek, setCurrentWeek] = useState(new Date());
 
+    const [selectedTimeslot, setSelectedTimeslot] = useState(null);
+
     const timeTableRef = useRef(null);
     const location = useLocation();
 
@@ -122,7 +124,15 @@ function DoctorDetails(props) {
     if (groupedTimeslots[day]) {
       return groupedTimeslots[day].map((ts) => {
         if (ts.start_time.includes(`T${index.toString().padStart(2, '0')}:`)) {
-          return <div key={ts.id} className={ts.status}>{ts.status}</div>;
+          return (
+            <div
+              key={ts.id}
+              className={`${ts.status === 'available' ? 'available' : ''}`}
+              onClick={() => ts.status === 'available' && handleTimeslotClick(ts)}
+            >
+              {ts.status}
+            </div>
+          );
         } else {
           return null;
         }
@@ -132,10 +142,29 @@ function DoctorDetails(props) {
     }
   };
 
+  const handleBooking = () => {
+    // Update the status of the selected timeslot from available to booked
+    const updatedTimeslot = { ...selectedTimeslot, status: 'booked' };
+  
+    // Store the timeslot in local storage
+    const bookedTimeslot = JSON.stringify(updatedTimeslot);
+    localStorage.setItem('bookedTimeslot', bookedTimeslot);
+  
+    // Perform any other necessary actions
+    // ...
+  
+    // Clear the selected timeslot
+    setSelectedTimeslot(null);
+  };
+
   const handleScrollToTimetable = () => {
     timeTableRef.current.scrollIntoView({ behavior: 'smooth' });
   };
   
+  const handleTimeslotClick = (timeslot) => {
+    setSelectedTimeslot(timeslot);
+    console.log(timeslot);
+  };
 
   return (
     <div className='doctor-details'>

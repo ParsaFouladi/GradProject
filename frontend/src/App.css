@@ -68,13 +68,32 @@ a{
 .slick-list{
   margin: 0 10px;
 }
-.slider-container .card{
+.slider-container h1{
+  margin-left: 20px;
+  /* text-align: center; */
+  /* color: var(--orange-color); */
+}
+.slider-container .doctor-card{
   border: 1px solid #ccc;
   padding: 20px;
   text-align: center;
   border-radius: 30px;
-  background-color: black;
-  color: white;
+  background-color: white;
+  cursor: pointer;
+}
+.slider-container .doctor-card img{
+  margin: auto;
+  border-radius: 25px;
+}
+.slider-container .doctor-card h3{
+  font-size: 17px;
+  color: var(--orange-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.slider-container .doctor-card p{
+  font-size: 13px;
 }
 .arrow{
   font-size: 40px;
@@ -734,6 +753,10 @@ a{
   background-color: #f6f6f6;
 }
 .sign-up .form-container .body-2{
+  
+}
+
+.sign-up .form-container .body-2 .input-container{
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -742,11 +765,15 @@ a{
 .sign-up .form-container .body-2 .input-field{
   flex-basis: calc(50% - 20px);
   width: 100%;
+  display: flex;
+  align-items: center;
 }
 .sign-up .form-container .body-2 .input-field label:not(.radio-label){
-  width: 25%;
+  display: block;
+  flex-basis: 25%;
+  /* width: 25%; */
   margin-right: 20px;
-  text-align: left;
+  /* text-align: left; */
   font-weight: 600;
   font-size: 20px;
 }
@@ -775,6 +802,22 @@ a{
 }
 .sign-up .form-container .body-2 .input-field.gender-field .gender-category{
   width: 70%;
+}
+.sign-up .form-container .body-2 .navigation-buttons{
+  display: flex;
+  justify-content: space-around;
+  margin-top: 25px;
+}
+.sign-up .form-container .body-2 .navigation-buttons button{
+  outline: none;
+  border: none;
+  color: white;
+  background-color: var(--orange-color);
+  font-size: 18px;
+  padding: 8px 25px;
+  border-radius: 30px;
+  margin-left: 25px;
+  cursor: pointer;
 }
 /* end sign-up page */
 

@@ -18,14 +18,14 @@ export default function Footer() {
         } else {
         // Handle the case when the role is unknown or not set
         // You can redirect the user to an error page or a default account page
-        navigate('/error');
+        // navigate('/error');
         }
   return (
     <div className='footer' id='footer'>
         <div className="container">
             <div className="col about">
                 <h2>About Us</h2>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tenetur obcaecati architecto perspiciatis nesciunt aperiam consequatur totam possimus quia debitis? Quae autem saepe officiis quisquam, reprehenderit praesentium at nihil rem ducimus, cupiditate quod architecto eligendi. Sit nisi sapiente possimus aperiam delectus!
+                <p>Welcome to our Physicians' Website! We specialize in web scraping technology to provide you with the most accurate and up-to-date information about physicians in your area. Our user-friendly interface allows you to easily search and find healthcare professionals based on their specialties, certifications, and affiliations. Trust us to simplify your physician search and empower you with the information you need to make informed healthcare decisions.
                 </p>
 
             </div>

@@ -174,146 +174,150 @@ function Signup() {
             //     )}
             //   </div>
                 <div className="body-2">
-                    <div className="input-field">
-                        <label htmlFor="firstName">First Name</label>
-                        <input
-                            type="text"
-                            placeholder="First Name"
-                            onChange={handleChange}
-                            name="firstName"
-                            value={formData.firstName}
-                        />
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="lastName">Last Name</label>
-                        <input
-                            type="text"
-                            placeholder="Last Name"
-                            onChange={handleChange}
-                            name="lastName"
-                            value={formData.lastName}
-                        />
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="phoneNumber">Phone Number</label>
-                        <input
-                            type="text"
-                            placeholder="Phone Number"
-                            onChange={handleChange}
-                            name="phoneNumber"
-                            value={formData.phoneNumber}
-                        />
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="address">Address</label>
-                        <input
-                            type="text"
-                            placeholder="Address"
-                            onChange={handleChange}
-                            name="address"
-                            value={formData.address}
-                        />
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="birthDate">Birth Date</label>
-                        <input
-                            type='date'
-                            placeholder="Birth Date"
-                            onChange={handleChange}
-                            name="birthDate"
-                            value={formData.birthDate}
-                        />
-                    </div>
-                    <div className="input-field gender-field">
-                        <span>Gender</span>
-                        <div className="gender-category">
-                        <input 
-                            type="radio"
-                            id="male"
-                            name="gender"
-                            value="unemployed"
-                            checked={formData.gender === "male"}
-                            onChange={handleChange}
-                        />
-                        <label htmlFor="male" className='radio-label'>Male</label>
-                        <input 
-                            type="radio"
-                            id="female"
-                            name="gender"
-                            value="female"
-                            checked={formData.gender === "female"}
-                            onChange={handleChange}
-                        />
-                        <label htmlFor="female" className='radio-label'>Female</label>
-                        </div>
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="email">Email</label>
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            onChange={handleChange}
-                            name="email"
-                            value={formData.email}
-                        />
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="password">Password</label>
-                        <input 
-                            type="password" 
-                            placeholder="Password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    <div className="input-field">
-                        <label htmlFor="confirmPassword">Confirm Password</label>
-                        <input 
-                            type="password" 
-                            placeholder="Confirm password"
-                            name="confirmPassword"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                        />
-                    </div>
-                    {formData.userType === "doctor" && (
-                        <>
+                    <div className="input-container">
                         <div className="input-field">
-                            <label htmlFor="medicalSpecialty">Medical Speciality</label>
-                            <select 
-                                id="medicalSpecialty" 
-                                value={formData.medicalSpecialty}
-                                onChange={handleChange}
-                                name="medicalSpecialty"
-                            >
-                                <option value="">-- Choose --</option>
-                                <option value="speciality1">Speciality 1</option>
-                                <option value="speciality2">Speciality 2</option>
-                                <option value="speciality3">Speciality 3</option>
-                                <option value="speciality4">Speciality 4</option>
-                                <option value="speciality5">Speciality 5</option>
-                            </select>
-                        </div>
-                        <div className="input-field">
-                            <label htmlFor="hospitalName">Hospital Name</label>
+                            <label htmlFor="firstName">First Name</label>
                             <input
                                 type="text"
-                                placeholder="Hospital Name"
+                                placeholder="First Name"
                                 onChange={handleChange}
-                                name="hospitalName"
-                                value={formData.hospitalName}
+                                name="firstName"
+                                value={formData.firstName}
                             />
                         </div>
+                        <div className="input-field">
+                            <label htmlFor="lastName">Last Name</label>
+                            <input
+                                type="text"
+                                placeholder="Last Name"
+                                onChange={handleChange}
+                                name="lastName"
+                                value={formData.lastName}
+                            />
+                        </div>
+                        <div className="input-field">
+                            <label htmlFor="phoneNumber">Phone Number</label>
+                            <input
+                                type="text"
+                                placeholder="Phone Number"
+                                onChange={handleChange}
+                                name="phoneNumber"
+                                value={formData.phoneNumber}
+                            />
+                        </div>
+                        <div className="input-field">
+                            <label htmlFor="address">Address</label>
+                            <input
+                                type="text"
+                                placeholder="Address"
+                                onChange={handleChange}
+                                name="address"
+                                value={formData.address}
+                            />
+                        </div>
+                        <div className="input-field">
+                            <label htmlFor="birthDate">Birth Date</label>
+                            <input
+                                type='date'
+                                placeholder="Birth Date"
+                                onChange={handleChange}
+                                name="birthDate"
+                                value={formData.birthDate}
+                            />
+                        </div>
+                        <div className="input-field gender-field">
+                            <span>Gender</span>
+                            <div className="gender-category">
+                            <input 
+                                type="radio"
+                                id="male"
+                                name="gender"
+                                value="unemployed"
+                                checked={formData.gender === "male"}
+                                onChange={handleChange}
+                            />
+                            <label htmlFor="male" className='radio-label'>Male</label>
+                            <input 
+                                type="radio"
+                                id="female"
+                                name="gender"
+                                value="female"
+                                checked={formData.gender === "female"}
+                                onChange={handleChange}
+                            />
+                            <label htmlFor="female" className='radio-label'>Female</label>
+                            </div>
+                        </div>
+                        <div className="input-field">
+                            <label htmlFor="email">Email</label>
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                onChange={handleChange}
+                                name="email"
+                                value={formData.email}
+                            />
+                        </div>
+                        <div className="input-field">
+                            <label htmlFor="password">Password</label>
+                            <input 
+                                type="password" 
+                                placeholder="Password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        <div className="input-field">
+                            <label htmlFor="confirmPassword">Confirm Password</label>
+                            <input 
+                                type="password" 
+                                placeholder="Confirm password"
+                                name="confirmPassword"
+                                value={formData.confirmPassword}
+                                onChange={handleChange}
+                            />
+                        </div>
+                        {formData.userType === "doctor" && (
+                            <>
+                            <div className="input-field">
+                                <label htmlFor="medicalSpecialty">Medical Speciality</label>
+                                <select 
+                                    id="medicalSpecialty" 
+                                    value={formData.medicalSpecialty}
+                                    onChange={handleChange}
+                                    name="medicalSpecialty"
+                                >
+                                    <option value="">-- Choose --</option>
+                                    <option value="speciality1">Speciality 1</option>
+                                    <option value="speciality2">Speciality 2</option>
+                                    <option value="speciality3">Speciality 3</option>
+                                    <option value="speciality4">Speciality 4</option>
+                                    <option value="speciality5">Speciality 5</option>
+                                </select>
+                            </div>
+                            <div className="input-field">
+                                <label htmlFor="hospitalName">Hospital Name</label>
+                                <input
+                                    type="text"
+                                    placeholder="Hospital Name"
+                                    onChange={handleChange}
+                                    name="hospitalName"
+                                    value={formData.hospitalName}
+                                />
+                            </div>
 
-                        </>
-                    )}
-                    <button type="button" onClick={previousPage}>
-                        Previous
-                    </button>
-                    <button type="button" onClick={nextPage}>
-                        Next
-                    </button>
+                            </>
+                        )}
+                    </div>
+                    <div className="navigation-buttons">
+                        <button type="button" onClick={previousPage}>
+                            Previous
+                        </button>
+                        <button type="button" onClick={nextPage}>
+                            Next
+                        </button>
+                    </div>
                 </div>
             );
           case 3:

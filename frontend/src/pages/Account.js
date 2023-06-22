@@ -64,7 +64,8 @@ function Account() {
                  <div className="body">
                 <div className="left-side">
                     <div className="image-container">
-                        <AiOutlineUser className="user-icon" />
+                        {/* <AiOutlineUser className="user-icon" /> */}
+                        <img src={patient.image} style={{width: "140px", height: "140px", borderRadius: "50%"}} alt="" />
                     </div>
                     <h2>{patient.first_name} {patient.last_name}</h2>
                     <h4>{patient.user.username}</h4>
