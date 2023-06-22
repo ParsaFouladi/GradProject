@@ -23,9 +23,10 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
+from MedFinder.admin import custom_admin_site 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', custom_admin_site.urls),
     path('doctors/',include("doctor_app.urls")),
     path('patients/',include("patient_app.urls_patients")),
     path('insurances/',include("patient_app.urls_insurances")),
