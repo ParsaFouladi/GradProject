@@ -6,6 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from .permissions import IsOwner
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
 
 class PatientDetailApiView(generics.RetrieveAPIView):
     queryset = Patient.objects.all()
@@ -54,3 +55,15 @@ class InsuranceDeleteApiView(generics.DestroyAPIView):
 
 
 
+#Get patient id based on the username
+@api_view(['GET'])
+def get_patient_id(request):
+    if request.method == 'GET':
+        username=request.query_params.get('username',None)
+        if not username:
+            return Response({'patient_id': None, 'error': 'Username not provided'})
+        #Check if the user exits
+        if not Patient.objects.filter(user__username=username).exists():
+            return Response({'patient_id': None, 'error': 'User does not exist'})
+        patient = Patient.objects.get(user__username=username)
+        return Response({'patient_id': patient.id,'role':'patient'})
