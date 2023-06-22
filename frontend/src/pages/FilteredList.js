@@ -16,8 +16,10 @@ function FilteredList() {
   const [previousPage, setPreviousPage] = useState('');
   const [selectedLocation, setSelectedLocation] = useState('');
   const [selectedSpecialty, setSelectedSpecialty] = useState('');
+  const [selectedExperience, setSelectedExperience] = useState('');
   const [locationOptions, setLocationOptions] = useState([]);
   const [specialtyOptions, setSpecialtyOptions] = useState([]);
+  const [experienceOptions, setExperienceOptions] = useState([]);
   const [resetFilters, setResetFilters] = useState(false);
   const [doctorRatings, setDoctorRatings] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
@@ -32,10 +34,10 @@ function FilteredList() {
   }, []);
 
   useEffect(() => {
-    if (selectedLocation || selectedSpecialty || resetFilters || searchQuery) {
+    if (selectedLocation || selectedSpecialty || selectedExperience || resetFilters || searchQuery) {
       fetchDoctorsWithFilters();
     }
-  }, [selectedLocation, selectedSpecialty, resetFilters, searchQuery]);
+  }, [selectedLocation, selectedSpecialty, selectedExperience, resetFilters, searchQuery]);
 
   const fetchDoctors = async (url) => {
     try {
@@ -59,6 +61,7 @@ function FilteredList() {
       if (resetFilters) {
         setSelectedLocation('');
         setSelectedSpecialty('');
+        setSelectedExperience('');
         setResetFilters(false);
         apiUrl = baseUrl;
       }
@@ -90,6 +93,10 @@ function FilteredList() {
 
     if (selectedSpecialty) {
       params.push(`specialty=${selectedSpecialty}`);
+    }
+
+    if (selectedExperience) {
+      params.push(`experiance=${selectedExperience}`);
     }
     
     if (searchQuery) {
@@ -163,6 +170,11 @@ function FilteredList() {
     }
   };
 
+  const generateExperienceOptions = () => {
+    const options = [0, 5, 10, 15, 20, 25];
+    return options;
+  };
+
 
   const handleNextPage = () => {
     if (nextPage) {
@@ -187,6 +199,11 @@ function FilteredList() {
     setSelectedSpecialty(specialty);
   };
 
+  const handleExperienceChange = (event) => {
+    const experience = event.target.value;
+    setSelectedExperience(experience);
+  };
+
   const handleResetFilters = () => {
     setResetFilters(true);
   };
@@ -198,10 +215,11 @@ function FilteredList() {
 
   const handleLogout = () => {
     // Clear the isLoggedIn value from local storage
+    localStorage.removeItem('role');
     localStorage.removeItem('isLoggedIn');
-  
-    // Perform any additional logout-related tasks (e.g., clearing user data)
-    localStorage.removeItem('userID');
+    
+    localStorage.removeItem('userId');
+    
   
     // Redirect the user to the login page or perform any desired navigation
     navigate("/")
@@ -268,9 +286,13 @@ function FilteredList() {
                 <FaCaretDown className="chevron-down"/>
             </div>
             <div className="select-box">
-                <select name="" id="">
-                    <option value="">Insu. Available</option>
-                    <option value="">Insu. Not Available</option>
+                <select value={selectedExperience} onChange={handleExperienceChange}>
+                  <option value="">Select Experience</option>
+                  {generateExperienceOptions().map((experience) => (
+                    <option key={experience} value={experience}>
+                      {experience}+ Years
+                    </option>
+                  ))}
                 </select>
                 <FaCaretDown className="chevron-down"/>
             </div>

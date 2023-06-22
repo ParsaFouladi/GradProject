@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
+// import Navbar from '../components/Navbar'
 import { useRef, useState, useEffect} from 'react'
 import useAuth from '../hooks/useAuth';
 import axios from '../api/axios';
@@ -84,23 +84,13 @@ export default function Login() {
 
       const getUserIdAndRole = async () => {
         try {
-          const response = await axios.get(PATIENTS_URL
-            // ,
-            //  {
-            //      headers: { Authorization: `Bearer ${auth.accessToken}` },
-            // }
-          );
-      
-          const patients = response.data.results;
-          const patient = patients.find((p) => p.user.username === user);
-          if (patient) {
-            const userId = patient.id;
-            const role = patient.role;
+            const response = await axios.get(`http://127.0.0.1:8000/patients/get_patient_id/?username=${user}`);
+        
+            const { patient_id: userId, role } = response.data;
             localStorage.setItem('userId', userId);
             localStorage.setItem('role', role);
             // setUserIdAndRole(userId, role);
             return;
-          }
         } catch (error) {
           console.log('Error getting patient:', error);
         }
@@ -138,7 +128,7 @@ export default function Login() {
         <div className='login-page'>
         <div className="oval-horizontal"></div>
         <div className="oval-vertical"></div>
-        <Navbar />
+        {/* <Navbar /> */}
         <div className="login-container container">
             <div className="text">
                 <h1>Login Form</h1>
