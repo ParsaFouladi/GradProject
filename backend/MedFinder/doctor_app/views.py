@@ -117,3 +117,15 @@ class TimeSlotScrapedListApiView(generics.ListAPIView):
 class TopRatedDoctorsListApiView(generics.ListAPIView):
     queryset = ScrapedDoctors.objects.annotate(avg_rating=Avg('reviewscraped__rating')).order_by('-avg_rating')[:8] 
     serializer_class = ScrapedDoctorsSerializer
+
+@api_view(['GET'])
+def get_doctor_id(request):
+    if request.method == 'GET':
+        username=request.query_params.get('username',None)
+        if not username:
+            return Response({'doctor_id': None, 'error': 'Username not provided'})
+        #Check if the user exits
+        if not Doctor.objects.filter(user__username=username).exists():
+            return Response({'doctor_id': None, 'error': 'User does not exist'})
+        doctor = Doctor.objects.get(user__username=username)
+        return Response({'doctor_id': doctor.id,'role':'doctor'})
