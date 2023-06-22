@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from patient_app.models import Patient
+from patient_app.models import Patient,Insurance
 import nltk
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 nltk.download('vader_lexicon')
@@ -47,6 +47,7 @@ class ScrapedDoctors(models.Model):
     description=models.TextField(blank=True)
     image_url=models.CharField(max_length=10000)
     country = models.CharField(max_length=100, default='Country not provided')
+    insurance=models.ManyToManyField(Insurance,null=True, blank=True)
     
     @property
     def average_rating(self):

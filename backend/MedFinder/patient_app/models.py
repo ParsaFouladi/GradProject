@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 
 class Insurance(models.Model):
     name = models.CharField(max_length=100)
-    number = models.CharField(max_length=100)
-    provider = models.CharField(max_length=100)
-    valid_from = models.DateField()
-    valid_to = models.DateField()
+    number = models.CharField(max_length=100,null=True, blank=True)
+    provider = models.CharField(max_length=100,null=True, blank=True)
+    valid_from = models.DateField(null=True, blank=True)
+    valid_to = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f"Insurance: {self.name}"
