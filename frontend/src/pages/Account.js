@@ -77,13 +77,13 @@ function Account() {
         <div className="oval-vertical"></div>
         <div className="container">
             <div className="header">
-                <h2>Medfinder Account</h2>
+                <h2>Doctor Scout Account</h2>
                 <button onClick={handleLogout}>Logout</button>
             </div>
             
             {patient ? (
               <>
-                 <div className="body">
+                 <div className="body" style={{position: "relative"}}>
                 <div className="left-side">
                     <div className="image-container">
                         {/* <AiOutlineUser className="user-icon" /> */}

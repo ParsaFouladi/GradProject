@@ -22,7 +22,7 @@ export default function Footer() {
         }
   return (
     <div className='footer' id='footer'>
-        <div className="container">
+        <div className="container ">
             <div className="col about">
                 <h2>About Us</h2>
                 <p>Welcome to our Physicians' Website! We specialize in web scraping technology to provide you with the most accurate and up-to-date information about physicians in your area. Our user-friendly interface allows you to easily search and find healthcare professionals based on their specialties, certifications, and affiliations. Trust us to simplify your physician search and empower you with the information you need to make informed healthcare decisions.

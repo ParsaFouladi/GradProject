@@ -33,11 +33,12 @@ function Navbar() {
                     )}
                 </li>
                 <li>
-                    <a href="#footer" className='nav-link'>About</a>
-                </li>
-                <li>
                     <Link to={accountUrl} className='nav-link'>Account</Link>
                 </li>
+                <li>
+                    <a href="#footer" className='nav-link'>About</a>
+                </li>
+                
                 <li>
                     <a href="#footer" className='nav-link'>Contact Us</a>
                 </li>

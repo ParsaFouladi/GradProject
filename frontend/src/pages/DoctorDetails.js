@@ -277,7 +277,7 @@ function DoctorDetails(props) {
                                   {renderRatingEmojis(review)}
                                 </div>
                                 <div className="name-rating">
-                                  <h4>Yagmur W. - February. 2023</h4> {/* Update with appropriate date */}
+                                  {/* <h4>Yagmur W. - February. 2023</h4> */}
                                   <div className="rating">
                                     {renderRatingStars([review])}
                                   </div>
